@@ -1,0 +1,65 @@
+function createDataset(fields, constraints, sortFields) {
+	var newDataset = DatasetBuilder.newDataset();
+    var dataSource = "/jdbc/totvsrmsenar";
+    var ic = new javax.naming.InitialContext();
+    var ds = ic.lookup(dataSource);
+    var created = false;
+	
+	for(var i in constraints) {
+		if(constraints[i]['fieldName'] == 'STURMA_CODTIPOCURSO') var STURMA_CODTIPOCURSO = constraints[i]['finalValue'];
+		if(constraints[i]['fieldName'] == 'STURMA_IDPERLET') var STURMA_IDPERLET = constraints[i]['finalValue'];
+	}
+	
+	var myQuery = "";
+	
+	if (STURMA_IDPERLET == '' || STURMA_IDPERLET == null){
+		myQuery = " SELECT IDPERLET STURMA_IDPERLET, CODPERLET + ' - ' + DESCRICAO SPLETIVO_DESCRICAO " +
+		  " FROM SPLETIVO (NOLOCK) " +
+		  " WHERE SPLETIVO.CODCOLIGADA = 1 " +
+		  "   AND CODTIPOCURSO LIKE '%" + STURMA_CODTIPOCURSO + "%'";
+	} else {
+		myQuery = " SELECT IDPERLET STURMA_IDPERLET, CODPERLET + ' - ' + DESCRICAO SPLETIVO_DESCRICAO," +
+				  "  SPLETIVO.CODPERLET STURMA_CODPERLET " +
+				  " FROM SPLETIVO (NOLOCK) " +
+				  " WHERE SPLETIVO.CODCOLIGADA = 1 " +
+				  "   AND SPLETIVO.IDPERLET LIKE '%" + STURMA_IDPERLET + "%'";
+	}
+    
+
+    log.info("ds_CadastroTurma_PeriodoLetivo: " + myQuery);
+
+    try {
+        var conn = ds.getConnection();
+        var stmt = conn.createStatement();
+        var rs = stmt.executeQuery(myQuery);
+        var columnCount = rs.getMetaData().getColumnCount();
+        while (rs.next()) {
+            if (!created) {
+                for (var i = 1; i <= columnCount; i++) {
+                    newDataset.addColumn(rs.getMetaData().getColumnName(i));
+                }
+                created = true;
+            }
+            var Arr = new Array();
+            for (var i = 1; i <= columnCount; i++) {
+                var obj = rs.getObject(rs.getMetaData().getColumnName(i));
+                if (null != obj) {
+                    Arr[i - 1] = rs.getObject(rs.getMetaData().getColumnName(i)).toString();
+                } else {
+                    Arr[i - 1] = "null";
+                }
+            }
+            newDataset.addRow(Arr);
+        }
+    } catch (e) {
+        log.error("ds_CadastroTurma_PeriodoLetivo ==============> " + e.message);
+    } finally {
+        if (stmt != null) {
+            stmt.close();
+        }
+        if (conn != null) {
+            conn.close();
+        }
+    }
+    return newDataset;
+}

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Recomendações Técnicas</title>
+    <link href="/portal/resources/style-guide/css/fluig-style-guide.min.css" rel="stylesheet" type="text/css">
+    <link href="/portal/resources/style-guide/css/fluig-style-guide-flat.min.css" rel="stylesheet" type="text/css">
+    <script src="/portal/resources/js/jquery/jquery.js" type="text/javascript"></script>
+    <script src="/portal/resources/js/jquery/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="/portal/resources/js/mustache/mustache-min.js" type="text/javascript"></script>
+    <script src="/portal/resources/style-guide/js/fluig-style-guide.min.js" type="text/javascript"></script>
+    <link href="/portal/resources/style-guide/css/fluig-style-guide-filter.min.css" rel="stylesheet" type="text/css">
+    <link href="/portal/resources/style-guide/css/fluig-style-guide-ratingstars.min.css" rel="stylesheet" type="text/css">
+    <script src="/portal/resources/style-guide/js/fluig-style-guide-filter.min.js" type="text/javascript"></script>
+    <script src="/portal/resources/style-guide/js/fluig-style-guide-ratingstars.min.js" type="text/javascript"></script>
+    <script src="/webdesk/vcXMLRPC.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <div class="fluig-style-guide">
+
+        <div class="container-fluid">
+
+            <div class="panel panel-default" id="divCabecalho">
+
+                <div class="panel-heading">Dados</div>
+                <div class="panel-body">
+                    <div class="form-group fs-clearfix">
+
+                        <div class="col-sm-3 col-xs-12">
+                            <label for="produtor">Produtor</label>
+                            <input type="text" class="form-control" id="produtorNome" disabled>
+                        </div>
+
+                        <div class="col-sm-3 col-xs-12">
+                            <label for="propriedade">Propriedade</label>
+                            <input type="text" class="form-control" id="nomePropriedadeRural" disabled>
+                        </div>
+
+                        <div class="col-sm-2 col-xs-12">
+                            <label for="municipio">Município</label>
+                            <input type="text" class="form-control" id="municipioPropriedade" disabled>
+                        </div>
+
+                        <div class="col-sm-1 col-xs-12">
+                            <label for="estado">Estado</label>
+                            <input type="text" class="form-control" id="estadoPropriedade" disabled>
+                        </div>
+
+                        <div class="col-sm-1 col-xs-12">
+                            <label for="idPropriedade">ID</label>
+                            <input type="text" class="form-control" id="idPropriedade" disabled>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Recomendações</div>
+                <div class="panel-body">
+
+                    <div class="form-group fs-clearfix ">
+
+                        <div class="col-sm-2 col-xs-12">
+                            <label for="tipoRecomendacao">Tipo</label>
+                            <select class="form-control" name="tipoRecomendacao" id="tipoRecomendacao">
+								<option value=""></option>
+								<option value="FAEG">FAEG</option>
+								<option value="SENAR">SENAR</option>
+							</select>
+                        </div>
+
+                        <div class="col-sm-2 col-xs-12" data-type="date" data-show-properties="" data-field-name="dataRecomendacao">
+                            <label for="dataRecomendacao">Data Recomendação</label>
+                            <div class="input-group date" id="divDataRecomendacao">
+                                <input type="text" class="form-control" name="dataRecomendacao" id="dataRecomendacao" data-date="" mask="99/99/9999" placeholder="__/__/____"> <span class="input-group-addon"> <span
+									class="fluigicon fluigicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group fs-clearfix ">
+                        <div class="col-sm-12 col-xs-12">
+                            <label for="obsRecomendacao">Recomendação</label>
+                            <textarea rows="4" id="obsRecomendacao" class="form-control"></textarea>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="panel-footer">
+                    <div class="fs-clearfix ">
+                        <div class="col-sm-12 col-xs-12 ">
+                            <button class="btn btn-primary btn-block" id="btnNovaRecomendacao">Nova Recomendação</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Histórico</div>
+                <div class="panel-body">
+                    <div class="form-group fs-clearfix" id="divTabela">
+                        <div class="col-sm-12 col-xs-12">
+                            <div id="tabela" class="table-responsive">
+                                <table class="table table-hover table-bordered table-striped" id="tabelaRecomendacoes">
+                                    <thead>
+                                        <th>#</th>
+                                        <th>Data Recomendação</th>
+                                        <th>Tipo</th>
+                                        <th>Recomendação</th>
+                                        <th>Data Resolução</th>
+                                        <th>Resolução</th>
+                                        <th>Situação</th>
+                                        <th></th>
+                                    </thead>
+                                    <tbody id="tbodyTabelaRecomendacao">
+                                        <tr>
+                                            <td>1</td>
+                                            <td>25/11/1988</td>
+                                            <td>FAEG</td>
+                                            <td>bLA bLA bLA bLA bLA bLA bLA bLA</td>
+                                            <td>25/11/1988</td>
+                                            <td>AHD HAHSDH KAHSDK AS DKJHA KSD AHD HAHSDH KAHSDK AS DKJHA KSD</td>
+                                            <td>Resolvido</td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        //permite digitar somente numeros
+        $('body').on('keypress', '[data-only-numbers]', function(ev) {
+            var k = ev.keyCode || ev.which;
+            //Permite apagar o conte&atilde;ÃÂÃÂÃÂ&atilde;ÃÂÃÂÃÂºdo do campo usando as teclas 'backspace' ou 'delete' no firefox.
+            //Nos outros navegadores o keypress n&atilde;ÃÂÃÂÃÂ&atilde;ÃÂÃÂÃÂ£o gera evento.
+            if (k == 8 || k == 46) {
+                return true;
+            }
+            k = String.fromCharCode(k);
+            if (isNaN(k)) {
+                return false;
+            }
+            return true;
+        });
+
+        $('.create-form-components').on('keyup', 'input[required="required"][type="text"], input[required="required"][type="number"], input[required="required"][type="date"], textarea[required="required"]', function() {
+            validationFieldsForm($(this), $(this).parents('.form-field').data('type'));
+        });
+
+        $('.create-form-components').on('change', 'input[required="required"][type="checkbox"], input[required="required"][type="radio"], select[required="required"]', function() {
+            validationFieldsForm($(this), $(this).parents('.form-field').data('type'));
+        });
+
+        function validationFieldsForm(field, type) {
+            if (type === "checkbox" || type === "radio") {
+                if (!field.is(':checked')) {
+                    field.parents('.form-field').addClass('required');
+                } else {
+                    field.parents('.form-field').removeClass('required');
+                }
+            } else {
+                if (!field.val().trim()) {
+                    field.parents('.form-field').addClass('required');
+                } else {
+                    field.parents('.form-field').removeClass('required');
+                }
+            }
+        }
+
+        var $zoomPreview = $(".zoom-preview");
+        if ($zoomPreview.length) {
+            $zoomPreview.parent().removeClass("input-group");
+            $zoomPreview.remove();
+        }
+
+        var ratings = $(".rating");
+        if (ratings.length > 0)
+            ratingStars(ratings);
+
+        function ratingStars(stars) {
+            $.each(stars, function(i, obj) {
+                var field = $(this).closest(".form-group").find(
+                    ".rating-value");
+                var tgt = $(obj);
+                tgt.html("");
+                var rating = FLUIGC.stars(tgt, {
+                    value: field.val()
+                });
+                rating.on("click", function(o) {
+                    field.val($(this).index() + 1);
+                });
+            });
+        }
+
+        $.each($("[data-date]"), function(i, o) {
+            var id = $(o).parent().attr("id");
+            FLUIGC.calendar("#" + id);
+        });
+    </script>
+
+    <link rel="stylesheet" type="text/css" href="/portal/resources/style-guide/css/fluig-style-guide-treeview.min.css">
+    <script src="/portal/resources/style-guide/js/fluig-style-guide-treeview.min.js"></script>
+
+    <script src="js/util.js"></script>
+    <script src="js/custom.js"></script>
+
+</body>
+<script src="/ecm_resources/resources/assets/forms/forms.js" type="text/javascript"></script>
+<script src="/ecm_resources/resources/assets/forms/wdkdetail.js" type="text/javascript"></script>
+
+</html>

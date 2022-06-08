@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/portal/resources/style-guide/css/fluig-style-guide.min.css" rel="stylesheet" type="text/css">
+    <link href="/portal/resources/style-guide/css/fluig-style-guide-flat.min.css" rel="stylesheet" type="text/css">
+    <script src="/portal/resources/js/jquery/jquery.js" type="text/javascript"></script>
+    <script src="/portal/resources/js/jquery/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="/portal/resources/js/mustache/mustache-min.js" type="text/javascript"></script>
+    <script src="/portal/resources/style-guide/js/fluig-style-guide.min.js" type="text/javascript"></script>
+    <link href="/portal/resources/style-guide/css/fluig-style-guide-filter.min.css" rel="stylesheet" type="text/css">
+    <link href="/portal/resources/style-guide/css/fluig-style-guide-ratingstars.min.css" rel="stylesheet" type="text/css">
+    <script src="/portal/resources/style-guide/js/fluig-style-guide-filter.min.js" type="text/javascript"></script>
+    <script src="/portal/resources/style-guide/js/fluig-style-guide-ratingstars.min.js" type="text/javascript"></script>
+    <script src="/webdesk/vcXMLRPC.js" type="text/javascript"></script>
+    <script src="js/jquery.mask.js"></script>
+</head>
+
+<body>
+    <div class="fluig-style-guide">
+
+        <div id="divCadastroProdutor" style="display: none;">
+
+            <fieldset id="fsSolicitante">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Consultar Dependente</h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="form-group fs-clearfix" id="divConsultaPessoaFisica">
+
+                            <div class="form-group fs-clearfix">
+                                <div class="col-sm-2 col-xs-12" data-type="textbox">
+                                    <label>CPF</label> <input type="text" class="form-control" name="cpfPessoaFisica" id="cpfPessoaFisica" mask="999.999.999-99">
+                                </div>
+
+                                <br />
+                                <button id="btnPesquisar" type="button" class="btn btn-primary">Pesquisar</button>
+
+                            </div>
+
+                            <div class="form-group fs-clearfix" id="divNovoProdutor">
+                                <div class="col-sm-3 col-xs-12" data-type="textbox">
+                                    <label>Nome</label> <input type="text" class="form-control" name="nomePessoaFisica" id="nomePessoaFisica" onkeyup="maiuscula(this)" />
+                                </div>
+
+                                <div class="col-sm-2 col-xs-12" data-type="date" data-show-properties="" data-field-name="dataNascimentoPessoaFisica">
+                                    <label>Data Nascimento</label>
+                                    <div class="input-group date" id="divDataNascimentoPessoaFisica">
+                                        <input type="text" class="form-control" name="dataNascimentoPessoaFisica" id="dataNascimentoPessoaFisica" data-date="" mask="99/99/9999"> <span class="input-group-addon"> <span
+											class="fluigicon fluigicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <br />
+
+                                <button id="btnAdicionar" type="button" class="btn btn-primary">Adicionar</button>
+
+                            </div>
+
+                            <div class="form-group fs-clearfix"></div>
+
+                        </div>
+
+                        <div class="form-group fs-clearfix" id="divBuscaPessoaFisica">
+                            <div class="col-sm-8 col-xs-12">
+                                <div class="form-field" data-type="zoomfield" data-show-properties="" data-field-name="buscaPessoaFisica">
+                                    <div class="form-input">
+                                        <label for="zoom">Consulta Pessoa Física</label>
+                                        <div class="input-group">
+                                            <input type="zoom" class="form-control" name="buscaPessoaFisica" id="buscaPessoaFisica" dataset='rm_ppessoa_senar' datasetvalue="CODIGO" data-zoom="{
+																			'datasetId':'rm_ppessoa_senar',
+																			'fields':[
+																				{'field':'CODIGO','label':'Código'},
+																				{'field':'NOME','label':'Nome','standard':true,'search':true}
+																			]}">
+                                            <div class="input-group-addon zoom-preview">
+                                                <span class="fluigicon fluigicon-zoom-in"></span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hidden-inputs">
+                            <input type="text" name="codPessoa" id="codPessoa" hidden="true"> <input type="text" name="codCfo" id="codCfo" hidden="true"> <input type="text" name="codVinculo" id="codVinculo" hidden="true"> <input type="text" name="tipoProcesso"
+                                id="tipoProcesso" hidden="true"> <input type="text" name="numeroProcesso" id="numeroProcesso" hidden="true">
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset id="fsPessoa">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Pessoal</h3>
+                    </div>
+
+                    <div class="panel-body">
+
+                        <div class="">
+                            <div class="col-sm-10 col-xs-12" style="margin-left: -15px">
+                                <div class="form-group fs-clearfix">
+
+                                    <div class="col-sm-3 col-xs-12" data-type="textbox">
+                                        <label>Nome <span class="required text-danger"><strong>*</strong></span></label> <input type="text" class="form-control" name="nome" id="nome">
+                                    </div>
+
+                                    <div class="col-sm-3 col-xs-12" data-type="textbox">
+                                        <label>Nome Social</label> <input type="text" class="form-control" name="nomeSocial" id="nomeSocial" style="text-transform: capitalize;" ">
+									</div>
+
+									<div class="col-sm-3 col-xs-12 " data-type="textbox ">
+										<label>Apelido</label> <input type="text" class="form-control " name="apelido" id="apelido"
+											style="text-transform: capitalize; "">
+                                    </div>
+
+
+                                    <div class="col-sm-2 col-xs-12" data-type="textbox">
+                                        <label>CPF <span class="required text-danger"><strong>*</strong></span></label> <input type="text" class="form-control" name="cgc" id="cgc">
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group fs-clearfix" id="divPessoa">
+
+                                    <div class="col-sm-2 col-xs-12" data-type="textbox">
+                                        <label>RG</label> <input type="number" class="form-control" name="numeroRG" id="numeroRG">
+                                    </div>
+
+                                    <div class="col-sm-2 col-xs-12" data-type="textbox">
+                                        <label>Or. Expedidor</label> <input type="text" class="form-control" name="orgaoExpedidor" id="orgaoExpedidor">
+                                    </div>
+
+                                    <div class="col-sm-2  col-xs-12" data-type="combo">
+                                        <label>Estado Emissor</label> <select class="form-control" name="estadoEmissor" id="estadoEmissor">
+											<option value="">Selecione</option>
+											<option value="AC">AC - Acre</option>
+											<option value="AL">AL - Alagoas</option>
+											<option value="AM">AM - Amazonas</option>
+											<option value="AP">AP - Amapá</option>
+											<option value="BA">BA - Bahia</option>
+											<option value="CE">CE - Ceará</option>
+											<option value="DF">DF - Distrito Federal</option>
+											<option value="ES">ES - Espírito Santo</option>
+											<option value="GO">GO - Goiás</option>
+											<option value="MA">MA - Maranhão</option>
+											<option value="MG">MG - Minas Gerais</option>
+											<option value="MS">MS - Mato Grosso do Sul</option>
+											<option value="MT">MT - Mato Grosso</option>
+											<option value="PA">PA - Pará</option>
+											<option value="PB">PB - Paraíba</option>
+											<option value="PE">PE - Pernambuco</option>
+											<option value="PI">PI - Piauí</option>
+											<option value="PR">PR - Paraná</option>
+											<option value="RJ">RJ - Rio de Janeiro</option>
+											<option value="RN">RN - Rio Grande do Norte</option>
+											<option value="RO">RO - Rondônia</option>
+											<option value="RR">RR - Roraima</option>
+											<option value="RS">RS - Rio Grande do Sul</option>
+											<option value="SC">SC - Santa Catarina</option>
+											<option value="SE">SE - Sergipe</option>
+											<option value="SP">SP - São Paulo</option>
+											<option value="TO">TO - Tocantins</option>
+											<option value="--">Outro</option>
+										</select>
+                                    </div>
+
+                                    <div class="col-sm-2 col-xs-12" data-type="date" data-show-properties="" data-field-name="dataNascimento">
+                                        <label>Data Nascimento <span class="required text-danger"><strong>*</strong></span></label>
+                                        <div class="input-group date" id="divDataNascimento">
+                                            <input type="text" class="form-control" name="dataNascimento" id="dataNascimento" data-date="" mask="99/99/9999"> <span class="input-group-addon"> <span
+												class="fluigicon fluigicon-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-1 col-xs-12" data-type="textbox">
+                                        <label>Idade</label> <input type="text" class="form-control" name="idade" id="idade">
+                                    </div>
+
+                                    <div class="col-sm-2  col-xs-12" data-type="combo">
+                                        <label>Sexo <span class="required text-danger"><strong>*</strong></span></label> <select class="form-control" name="sexo" id="sexo">
+											<option value="">Selecione</option>
+											<option value="M">Masculino</option>
+											<option value="F">Feminino</option>
+										</select>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group fs-clearfix">
+
+                                    <div class="col-sm-2  col-xs-12" data-type="combo">
+                                        <label>Estado Civil <span class="required text-danger"><strong>*</strong></span></label> <select class="form-control" name="estadoCivil" id="estadoCivil">
+											<option value="">Selecione</option>
+											<option value="C">Casado</option>
+											<option value="D">Desquitado</option>
+											<option value="E">União Estável</option>
+											<option value="I">Divorciado</option>
+											<option value="O">Outros</option>
+											<option value="P">Separado</option>
+											<option value="S">Solteiro</option>
+											<option value="V">Viúvo</option>
+										</select>
+                                    </div>
+
+                                    <div class="col-sm-2  col-xs-12" data-type="combo">
+                                        <label>Nacionalidade <span class="required text-danger"><strong>*</strong></span></label> <select class="form-control" name="nacionalidade" id="nacionalidade">
+											<option value="10">Brasileira</option>
+											<!--  <option value="1">Estrangeira</option> -->
+											<option value="50">Outros</option>
+										</select>
+                                    </div>
+
+                                    <div class="hidden-inputs" data-type="combo">
+                                        <label>Estado Natal</label> <select class="form-control" name="estadoNatal" id="estadoNatal">
+											<option value="">Selecione</option>
+											<option value="AC">AC - Acre</option>
+											<option value="AL">AL - Alagoas</option>
+											<option value="AM">AM - Amazonas</option>
+											<option value="AP">AP - Amapá</option>
+											<option value="BA">BA - Bahia</option>
+											<option value="CE">CE - Ceará</option>
+											<option value="DF">DF - Distrito Federal</option>
+											<option value="ES">ES - Espírito Santo</option>
+											<option value="GO">GO - Goiás</option>
+											<option value="MA">MA - Maranhão</option>
+											<option value="MG">MG - Minas Gerais</option>
+											<option value="MS">MS - Mato Grosso do Sul</option>
+											<option value="MT">MT - Mato Grosso</option>
+											<option value="PA">PA - Pará</option>
+											<option value="PB">PB - Paraíba</option>
+											<option value="PE">PE - Pernambuco</option>
+											<option value="PI">PI - Piauí</option>
+											<option value="PR">PR - Paraná</option>
+											<option value="RJ">RJ - Rio de Janeiro</option>
+											<option value="RN">RN - Rio Grande do Norte</option>
+											<option value="RO">RO - Rondônia</option>
+											<option value="RR">RR - Roraima</option>
+											<option value="RS">RS - Rio Grande do Sul</option>
+											<option value="SC">SC - Santa Catarina</option>
+											<option value="SE">SE - Sergipe</option>
+											<option value="SP">SP - São Paulo</option>
+											<option value="TO">TO - Tocantins</option>
+										</select>
+                                    </div>
+
+                                    <div class="hidden-inputs">
+                                        <div class="hidden-inputs">
+                                            <input type="text" class="form-control" name="idMunicipioNatal" id="idMunicipioNatal" /> <input type="text" class="form-control" name="naturalidade" id="naturalidade" />
+                                        </div>
+                                        <div class="form-field" data-type="zoomfield" data-show-properties="" data-field-name="codMunicipioNatal">
+                                            <div class="form-input">
+                                                <!--<label for="zoom">Consulta Município Natal</label>-->
+                                                <label for="zoom">Naturalidade</label>
+                                                <div class="input-group">
+                                                    <input type="zoom" class="form-control" name="codMunicipioNatal" id="codMunicipioNatal" data-zoom="{
+														'datasetId':'rm_municipio_estado',
+														'displayKey':'nmMunicipio',
+														'fields':[
+															{'field':'cdEstado',	'label':'Estado'},
+															{'field':'cdMunicipio',	'label':'Código',		'standard':true},
+															{'field':'nmMunicipio',	'label':'Município',	'search':true}
+															]}">
+                                                    <div class="input-group-addon zoom-preview">
+                                                        <span class="fluigicon fluigicon-zoom-in" id="btnMuniciopioNatal"></span>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 
+									<div class="col-sm-2  col-xs-12" data-type="combo">
+										<label>Tipo Dependente <span class="required text-danger"><strong>*</strong></span></label> <select
+											class="form-control" name="tipoAluno" id="tipoAluno">
+											<option value="">Selecione</option>
+											<option value="13">Esposo(a) (ET)</option>
+											<option value="14">Filho(a) (FP)</option>
+										</select>
+									</div>
+									 -->
+
+                                    <!-- 
+									<div class="col-sm-2 col-xs-12" data-type="textbox" data-show-properties="" data-field-name="text_propriet">
+										<label>RA</label> <input type="text" class="form-control" name="ra" id="ra">
+									</div>
+									 -->
+
+                                    <div class="col-sm-3 col-xs-12" data-type="textbox">
+                                        <label>Escolaridade <span class="required text-danger"><strong>*</strong></span></label> <select name="escolaridadePessoa" id="escolaridadePessoa" class="form-control">
+											<option value="">Selecione</option>
+											<option value="1">ANALFABETO</option>
+											<option value="2">ATÉ O 5º ANO INCOMPLETO DO ENSINO FUNDAMENTA</option>
+											<option value="3">5° COMPLETO DO ENSINO FUNDAMENTAL</option>
+											<option value="4">DO 6º AO 9ª ANO DO ENSINO FUNDAMENTA</option>
+											<option value="5">ENSINO FUNDAMENTAL COMPLETO</option>
+											<option value="6">ENSINO MÉDIO INCOMPLETO</option>
+											<option value="7">ENSINO MÉDIO COMPLETO</option>
+											<option value="8">EDUCAÇÃO SUPERIOR INCOMPLETO</option>
+											<option value="9">EDUCAÇÃO SUPERIOR COMPLETO</option>
+											<option value="A">PÓS GRAD. INCOMPLETO</option>
+											<option value="B">PÓS GRAD. COMPLETO</option>
+											<option value="C">MESTRADO INCOMPLETO</option>
+											<option value="D">MESTRADO COMPLETO</option>
+											<option value="E">DOUTORADO INCOMPLETO</option>
+											<option value="F">DOUTORADO COMPLETO</option>
+											<option value="G">PÓS DOUTORADO INCOMPLETO</option>
+											<option value="H">PÓS DOUTORADO COMPLETO</option>
+										</select>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group fs-clearfix">
+                                    <div class="col-sm-2 col-xs-12" data-type="textbox">
+                                        <label>Telefone </label> <input type="text" class="form-control phone" name="telefone" id="telefone">
+                                    </div>
+
+                                    <div class="col-sm-2 col-xs-12" data-type="textbox">
+                                        <label>Celular <span class="required text-danger"><strong>*</strong></span></label> <input type="text" class="form-control phone" name="celular" id="celular">
+                                    </div>
+
+                                    <div class="col-sm-4 col-xs-12">
+                                        <label>E-mail</label> <input class="form-control" type="email" id="email" name="email">
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group fs-clearfix">
+
+                                    <!-- Adicionado como hiden em 10/01/2017 -->
+                                    <div class="col-sm-4 col-xs-12" style="display: none;">
+                                        <input type="hidden" name="enderecoCidade" id="enderecoCidade" />
+                                        <div class="form-field" data-type="checkbox" data-show-properties="" data-field-name="'">
+                                            <label for="enderecoRural" class="control-label">É produtor Rural?</label><br /> <input type="checkbox" name="enderecoRural" id="enderecoRural" class="form-control" data-on-color="success" data-off-color="default"
+                                                value="" placeholder="" data-size="small" />
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="col-sm-2 col-xs-12">
+                                <div class="text-center">
+                                    <img id="imagem" name="imagem" src="" style="border: 2px solid blue; max-width: 90%;">
+                                </div>
+                                <br> <input type="file" id="btnIMagem" name="btnImagem" onchange="ValidaFormato(this.id)" accept=".jpg" class="btn btn-default form-control"> <br> <input type="text" id="imagemHex" name="imagemHex" onclick="ConverteBase64ParaHexadecimal()"
+                                    hidden="true"> <input type="text" name="idImagem" id="idImagem" hidden="true">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- 
+			    <div class="panel panel-default">
+			        <div class="panel-heading">
+			            <h3 class="panel-title">Informações Adicionais</h3>
+			        </div>
+			        <div class="panel-body">
+			            <div class="form-group fs-clearfix">
+			
+			                <div class="col-sm-2 col-xs-12" data-type="textbox">
+			                    <label>Deficiente Fisico</label> <select class="form-control" name="deficienteFisico" id="deficienteFisico">
+														<option value="">Selecione</option>
+														<option value="0">Não</option>
+														<option value="1">Sim</option>
+													</select>
+			                </div>
+			
+			                <div class="col-sm-2 col-xs-12" data-type="textbox">
+			                    <label>Deficiente Auditivo</label> <select class="form-control" name="deficienteAuditivo" id="deficienteAuditivo">
+														<option value="">Selecione</option>
+														<option value="0">Não</option>
+														<option value="1">Sim</option>
+													</select>
+			                </div>
+			
+			                <div class="col-sm-2 col-xs-12" data-type="textbox">
+			                    <label>Deficiente Fala</label> <select class="form-control" name="deficienteFala" id="deficienteFala">
+														<option value="">Selecione</option>
+														<option value="0">Não</option>
+														<option value="1">Sim</option>
+													</select>
+			                </div>
+			
+			                <div class="col-sm-2 col-xs-12" data-type="textbox">
+			                    <label>Deficiente Visual</label> <select class="form-control" name="deficienteVisual" id="deficienteVisual">
+														<option value="">Selecione</option>
+														<option value="0">Não</option>
+														<option value="1">Sim</option>
+													</select>
+			                </div>
+			
+			                <div class="col-sm-2 col-xs-12" data-type="textbox">
+			                    <label>Deficiente Mental</label> <select class="form-control" name="deficienteMental" id="deficienteMental">
+														<option value="">Selecione</option>
+														<option value="0">Não</option>
+														<option value="1">Sim</option>
+													</select>
+			                </div>
+			
+			            </div>
+			            <div class="form-group fs-clearfix">
+			                <div class="col-sm-2 col-xs-12" data-type="textbox">
+			                    <label>Etnia</label> <select class="form-control" name="etniaPessoa" id="etniaPessoa">
+														<option value="">Selecione</option>
+														<option value="0">Indígena</option>
+														<option value="2">Branca</option>
+														<option value="4">Negra</option>
+														<option value="6">Amarela</option>
+														<option value="8">Parda</option>
+														<option value="9">Não informado</option>
+														<option value="10">Não declarado</option>
+													</select>
+			                </div>
+			
+			                <div class="col-sm-2 col-xs-12" data-type="textbox">
+			                    <label>Renda Familiar</label> <select class="form-control" name="rendaFamiliarPessoa" id="rendaFamiliarPessoa">
+														<option value="">Selecione</option>
+														<option value="1">Até 1/2 salário mínimo</option>
+														<option value="2">De 1/2 a 1 salário mínimo</option>
+														<option value="3">De 1 a 3 salário mínimo</option>
+														<option value="4">De 3 a 5 salário mínimo</option>
+														<option value="5">De 5 a 10 salário mínimo</option>
+														<option value="6">Acima de 10 salário mínimo</option>
+													</select>
+			                </div>
+			
+			                <div class="hidden-inputs" data-type="textbox">
+			                    <label>Tipo Sanguineo</label> <select class="form-control" name="tipoSanguineo" id="tipoSanguineo">
+														<option value="">Selecione</option>
+														<option value="A+">A+</option>
+														<option value="A-">A-</option>
+														<option value="B+">B+</option>
+														<option value="B-">B-</option>
+														<option value="AB+">AB+</option>
+														<option value="AB-">AB-</option>
+														<option value="O+">O+</option>
+														<option value="O-">O-</option>
+													</select>
+			                </div>
+			
+			                <div class="hidden-inputs" data-type="textbox">
+			                    <label>Titulo Eleitor</label> <input type="text" class="form-control" name="tituloEleitor" id="tituloEleitor">
+			                </div>
+			
+			                <div class="hidden-inputs" data-type="textbox">
+			                    <label>Zona</label> <input type="text" class="form-control" name="tituloEleitorZona" id="tituloEleitorZona">
+			                </div>
+			
+			                <div class="hidden-inputs" data-type="textbox">
+			                    <label>Seção</label> <input type="text" class="form-control" name="tituloEleitorSecao" id="tituloEleitorSecao">
+			                </div>
+			
+			            </div>
+			
+			        </div>
+			    </div>
+			     -->
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Endereço</h3>
+                    </div>
+
+                    <div class="panel-body">
+
+                        <div class="form-group fs-clearfix">
+                            <div class="col-sm-2 col-xs-12" data-type="textbox">
+                                <label>CEP </label> <input type="text" class="form-control cep" name="cep" id="cep">
+                            </div>
+
+                            <div class="col-sm-4 col-xs-12" data-type="textbox">
+                                <label>Rua </label> <input type="text" class="form-control" name="rua" id="rua">
+                            </div>
+
+                            <div class="col-sm-1 col-xs-12" data-type="textbox">
+                                <label>N° </label> <input type="text" class="form-control" name="numero" id="numero">
+                            </div>
+
+                            <div class="col-sm-4 col-xs-12" data-type="textbox">
+                                <label>Complemento</label> <input type="text" class="form-control" name="complemento" id="complemento">
+                            </div>
+                        </div>
+                        <div class="form-group fs-clearfix">
+                            <div class="col-sm-2 col-xs-12" data-type="textbox">
+                                <label>Bairro </label> <input type="text" class="form-control" name="bairro" id="bairro">
+                            </div>
+
+                            <div class="col-sm-2  col-xs-12" data-type="combo">
+                                <label>Estado </label> <select class="form-control" name="estado" id="estado">
+									<option value="--">Selecione</option>
+									<option value="AC">AC - Acre</option>
+									<option value="AL">AL - Alagoas</option>
+									<option value="AM">AM - Amazonas</option>
+									<option value="AP">AP - Amapá</option>
+									<option value="BA">BA - Bahia</option>
+									<option value="CE">CE - Ceará</option>
+									<option value="DF">DF - Distrito Federal</option>
+									<option value="ES">ES - Espírito Santo</option>
+									<option value="GO">GO - Goiás</option>
+									<option value="MA">MA - Maranhão</option>
+									<option value="MG">MG - Minas Gerais</option>
+									<option value="MS">MS - Mato Grosso do Sul</option>
+									<option value="MT">MT - Mato Grosso</option>
+									<option value="PA">PA - Pará</option>
+									<option value="PB">PB - Paraíba</option>
+									<option value="PE">PE - Pernambuco</option>
+									<option value="PI">PI - Piauí</option>
+									<option value="PR">PR - Paraná</option>
+									<option value="RJ">RJ - Rio de Janeiro</option>
+									<option value="RN">RN - Rio Grande do Norte</option>
+									<option value="RO">RO - Rondônia</option>
+									<option value="RR">RR - Roraima</option>
+									<option value="RS">RS - Rio Grande do Sul</option>
+									<option value="SC">SC - Santa Catarina</option>
+									<option value="SE">SE - Sergipe</option>
+									<option value="SP">SP - São Paulo</option>
+									<option value="TO">TO - Tocantins</option>
+								</select>
+                            </div>
+
+                            <div class="col-sm-2 col-xs-12">
+                                <div class="hidden-inputs">
+                                    <input type="text" class="form-control" name="codigoMunicipio" id="codigoMunicipio" /> <input type="text" class="form-control" name="descMunicipio" id="descMunicipio" />
+                                </div>
+                                <div class="form-field" data-type="zoomfield" data-show-properties="" data-field-name="codMunicipio">
+                                    <div class="form-input">
+                                        <!-- <label for="zoom">Consulta Município</label> -->
+                                        <label for="">Município </label>
+                                        <div class="input-group">
+                                            <input type="zoom" class="form-control" name="codMunicipio" id="codMunicipio" dataset="rm_municipio_estado" datasetvalue="cdMunicipio" data-zoom="{
+														'datasetId':'rm_municipio_estado',
+														'displayKey':'nmMunicipio',
+														'fields':[
+															{'field':'cdEstado','label':'Estado'},
+															{'field':'cdMunicipio','label':'Código','standard':true},
+															{'field':'nmMunicipio','label':'Município','search':true}
+															]}">
+                                            <div class="input-group-addon zoom-preview">
+                                                <span class="fluigicon fluigicon-zoom-in" id="btnMunicipio"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-block" id="btnSalvarDadosProdutor" style="display: none;">Salvar</button>
+                <button class="btn btn-primary btn-block" id="btnNovoProdutor" style="display: none;">Novo Dependente</button>
+            </fieldset>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        //permite digitar somente numeros
+        $('body').on('keypress', '[data-only-numbers]', function(ev) {
+            var k = ev.keyCode || ev.which;
+            //Permite apagar o conte&atilde;ÃÂÃÂÃÂ&atilde;ÃÂÃÂÃÂºdo do campo usando as teclas 'backspace' ou 'delete' no firefox.
+            //Nos outros navegadores o keypress n&atilde;ÃÂÃÂÃÂ&atilde;ÃÂÃÂÃÂ£o gera evento.
+            if (k == 8 || k == 46) {
+                return true;
+            }
+            k = String.fromCharCode(k);
+            if (isNaN(k)) {
+                return false;
+            }
+            return true;
+        });
+
+        $('.create-form-components').on('keyup', 'input[required="required"][type="text"], input[required="required"][type="number"], input[required="required"][type="date"], textarea[required="required"]', function() {
+            validationFieldsForm($(this), $(this).parents('.form-field').data('type'));
+        });
+
+        $('.create-form-components').on('change', 'input[required="required"][type="checkbox"], input[required="required"][type="radio"], select[required="required"]', function() {
+            validationFieldsForm($(this), $(this).parents('.form-field').data('type'));
+        });
+
+        function validationFieldsForm(field, type) {
+            if (type === "checkbox" || type === "radio") {
+                if (!field.is(':checked')) {
+                    field.parents('.form-field').addClass('required');
+                } else {
+                    field.parents('.form-field').removeClass('required');
+                }
+            } else {
+                if (!field.val().trim()) {
+                    field.parents('.form-field').addClass('required');
+                } else {
+                    field.parents('.form-field').removeClass('required');
+                }
+            }
+        }
+
+        var $zoomPreview = $(".zoom-preview");
+        if ($zoomPreview.length) {
+            $zoomPreview.parent().removeClass("input-group");
+            $zoomPreview.remove();
+        }
+
+        var ratings = $(".rating");
+        if (ratings.length > 0)
+            ratingStars(ratings);
+
+        function ratingStars(stars) {
+            $.each(stars, function(i, obj) {
+                var field = $(this).closest(".form-group").find(
+                    ".rating-value");
+                var tgt = $(obj);
+                tgt.html("");
+                var rating = FLUIGC.stars(tgt, {
+                    value: field.val()
+                });
+                rating.on("click", function(o) {
+                    field.val($(this).index() + 1);
+                });
+            });
+        }
+
+        $.each($("[data-date]"), function(i, o) {
+            var id = $(o).parent().attr("id");
+            FLUIGC.calendar("#" + id);
+        });
+    </script>
+
+    <script src="js/custom.js"></script>
+    <script src="js/insert.js"></script>
+    <script src="js/imagem.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/ConsultaCep.js"></script>
+    <script src="utils/lodash.core.min.js"></script>
+
+</body>
+<script src="/ecm_resources/resources/assets/forms/forms.js" type="text/javascript"></script>
+<script src="/ecm_resources/resources/assets/forms/wdkdetail.js" type="text/javascript"></script>
+
+</html>

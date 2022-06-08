@@ -1,0 +1,105 @@
+/* Coloque aqui seu codigo CSS */
+
+.message {
+	margin-top: 10px;
+}
+
+li._list-item{
+	padding-top: 10px !important; 
+	padding-bottom: 10px !important;
+}
+
+div.fluig-style-guide.modal.full {
+    width: 98% !important;
+}
+
+button#pendente{
+	background-color: #FFA500 !important;
+	color: #FFFFFF !important;
+}
+button#aprovado{
+	background-color: #0000FF !important;
+	color: #FFFFFF !important;
+}
+button#reprovado{
+	background-color: #FF0000 !important;
+	color: #FFFFFF !important;
+}
+button#naoAgendado{
+	background-color: #808080 !important;
+	color: #FFFFFF !important;
+}
+
+/****************************************************************
+ * Menu                                                         *                                                          
+ ****************************************************************/
+#customizado ul {
+	list-style-type: none;
+	margin: 0 0 10px 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: #f5f5f5;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+}
+
+#customizado li {
+	float: left;
+}
+
+#customizado li a, #customizado .dropbtn {
+	display: inline-block;
+	color: black;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+}
+
+#customizado li a:hover, #customizado ._dropdown:hover .dropbtn {
+	background-color: #e7e7e7;
+}
+
+#customizado li._dropdown {
+	display: inline-block;
+}
+
+#customizado ._dropdown-content {
+	display: none;
+	position: absolute;
+	background-color: #f9f9f9;
+	min-width: 160px;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	z-index: 1;
+}
+
+#customizado ._dropdown-content a {
+	color: black;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+	text-align: left;
+}
+
+#customizado ._dropdown-content a:hover {
+	background-color: #f1f1f1
+}
+
+#customizado ._dropdown:hover ._dropdown-content {
+	display: block;
+}
+
+/****************************************************************
+ * Tabela                                                       *                                                          
+ ****************************************************************/
+ 
+  .table > thead > tr > th {
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    white-space:nowrap
+}
+
+ .table > thead > tr > th > i {
+	margin-left: 5px; 
+	display: none;
+ }

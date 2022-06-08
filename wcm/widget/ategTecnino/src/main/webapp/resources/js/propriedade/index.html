@@ -1,0 +1,573 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cadastro de Propriedades - SENAR MAIS</title>
+    <!-- *** CUSTOM *** -->
+    <link rel="stylesheet" type="text/css" href="/portal/resources/style-guide/css/fluig-style-guide.min.css">
+    <link rel="stylesheet" type="text/css" href="/portal/resources/style-guide/css/fluig-style-guide-flat.min.css">
+    <script src="/portal/resources/js/jquery/jquery.js"></script>
+    <script src="/portal/resources/js/jquery/jquery-ui.min.js"></script>
+    <script src="/portal/resources/js/mustache/mustache-min.js"></script>
+    <script src="/portal/resources/style-guide/js/fluig-style-guide.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/portal/resources/style-guide/css/fluig-style-guide-filter.min.css">
+    <link rel="stylesheet" type="text/css" href="/portal/resources/style-guide/css/fluig-style-guide-ratingstars.min.css">
+    <script src="/portal/resources/style-guide/js/fluig-style-guide-filter.min.js"></script>
+    <script src="/portal/resources/style-guide/js/fluig-style-guide-ratingstars.min.js"></script>
+    <script src="/webdesk/vcXMLRPC.js"></script>
+    <!-- CUSTOM -->
+    <link rel="stylesheet" type="text/css" href="/ategTecnico/resources/js/propriedade/css/maps.css" />
+    <link rel="stylesheet" type="text/css" href="/ategTecnico/resources/js/propriedade/css/custom.css" />
+    <!-- *** MAPS *** -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyDRw8u1scLmaXS3nxZeJ7fL8Eo0FHFiF8c" async defer></script>
+    <!-- CUSTOM -->
+    <script src="/ategTecnico/resources/js/produtor/js/utils/lodash.core.min.js"></script>
+    <script src="/ategTecnico/resources/js/produtor/js/utils/jquery.mask.min.js"></script>
+    <script src="/ategTecnico/resources/js/propriedade/js/googleMaps.js"></script>
+    <script src="/ategTecnico/resources/js/propriedade/js/util.js"></script>
+    <!--
+    <script src="/ategTecnico/resources/js/propriedade/js/dataset.js"></script>
+    <script src="/ategTecnico/resources/js/propriedade/js/historicoAteg.js"></script>
+    -->
+    <script src="/ategTecnico/resources/js/propriedade/js/ConsultaCep.js"></script>
+    <script src="/ategTecnico/resources/js/propriedade/js/search.js"></script>
+    <script src="/ategTecnico/resources/js/propriedade/js/upload.js"></script>
+    <script src="/ategTecnico/resources/js/propriedade/js/distance.js"></script>
+    <script src="/ategTecnico/resources/js/propriedade/js/custom.js"></script>
+</head>
+
+<body>
+    <div class="fluig-style-guide" id="formPropriedadeRural">
+        <div class="container-fluid">
+            <input type="text" id="idTecnicoPropriedade" name="idTecnicoPropriedade" style="display: none" />
+            <input type="text" id="idPropriedade" name="idPropriedade" style="display: none" />
+            <input type="hidden" name="idpropnova" id="idpropnova" />
+            <fieldset id="fsConsultaDadosPropriedade">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Consulta</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group fs-clearfix">
+                            <!-- 
+                            <div class="col-md-6">
+                                <div class="form-field" data-type="zoomfield">
+                                    <div class="form-input">
+                                        <div class="input-group">
+                                            <input name="codPPessoa" id="codPPessoa" type="hidden" /> <label for="in_buscaAluno">Produtor</label> <input name="in_buscaAluno" id="in_buscaAluno" type="zoom" class="form-control" data-zoom="{
+                                                'datasetId':'rm_edualunodata_readviewauth_senar',
+                                                'displayKey':'NOME',
+                                                'filterValues':'',
+                                                'fields':[
+                                                    {'field':'CODPESSOA', 'label':'C&oacute;digo'},
+                                                    {'field':'CPF', 'label':'CPF'},
+                                                    {'field':'NOME', 'label':'Nome','standard':true,	'search':true}
+                                            ]}" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            -->
+                            <input name="codPPessoa" id="codPPessoa" type="hidden" />
+                            <input name="cfpProdutor" id="cfpProdutor" type="hidden" />
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-field" data-type="zoomfield" data-show-properties="" data-field-name="in_buscaAluno">
+                                    <div class="form-input">
+                                        <div class="input-group col-md-12">
+                                            <label for="in_buscaAluno">Produtor Rural </label>
+                                            <input name="in_buscaAluno" id="in_buscaAluno" type="zoom" class="form-control" data-zoom="{
+                                                'datasetId':'rmSql_FLUIG0401',
+                                                'displayKey':'NOMEALUNO',
+                                                'fields':[
+                                                    {'field':'CODIGOALUNOPESSOA',	'label':'C&oacute;digo'},
+                                                    {'field':'CPF',	'label':'CPF'},
+                                                    {'field':'NOMEALUNO', 'label':'Nome','standard':true, 'search':true}
+								            ]}" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group fs-clearfix" id="divZoomPropriedadeRural">
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-field" data-type="zoomfield">
+                                    <div class="form-input">
+                                        <div class="input-group col-md-12">
+                                            <label for="zoomPropriedadeRural">Propriedade Rural</label>
+                                            <input name="zoomPropriedadeRural" id="zoomPropriedadeRural" type="zoom" class="form-control" data-zoom="{
+											    'datasetId':'FLUIG068',
+                                                'displayKey':'nomePropriedade',
+                                                'fields':[
+                                                    {'field':'idPropriedade','label':'C&oacute;digo'},
+                                                    {'field':'nomePropriedade','label':'Propriedade','search':true,'standard':true}
+                                            ]}" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <br />
+                                <button id="btnNovaPropriedade" type="button" class="btn btn-primary btn-block">Novo</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <div id="divDadosPropriedade">
+                <fieldset id="fsDadosPropriedade">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Dados da Propriedade</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group fs-clearfix">
+                                <div class="col-sm-4 col-xs-12" data-type="textbox">
+                                    <label>Nome Propriedade Rural * </label>
+                                    <input type="text" class="form-control" name="nomePropriedadeRural" id="nomePropriedadeRural" />
+                                </div>
+                                <div class="col-sm-2 col-xs-12" data-type="combo">
+                                    <label>Tipo Propriedade</label>
+                                    <select class="form-control" name="tipoPropriedade" id="tipoPropriedade">
+                                        <option value="arrendada">Arrendada</option>
+                                        <option value="propria">Propria</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-2 col-xs-12" data-type="textbox">
+                                    <label>NIRF</label>
+                                    <input type="number" class="form-control" name="nirf" id="nirf" />
+                                </div>
+                                <div class="col-sm-2 col-xs-12" data-type="textbox">
+                                    <label>CCIR</label>
+                                    <input type="number" class="form-control" name="ccir" id="ccir" />
+                                </div>
+                                <div class="col-sm-2 col-xs-12" data-type="textbox">
+                                    <label>DAP</label>
+                                    <input type="number" class="form-control" name="dap" id="dap" />
+                                </div>
+                            </div>
+                            <div class="form-group fs-clearfix">
+                                <div class="col-sm-2 col-xs-12" data-type="textbox">
+                                    <label>&Aacute;rea Total</label>
+                                    <input type="number" class="form-control" name="areaTotal" id="areaTotal" />
+                                </div>
+                                <div class="col-sm-3 col-xs-12" data-type="textbox">
+                                    <label>Produtor Rural Desde (Ano)</label>
+                                    <input type="text" class="form-control" name="produtorRuralDesde" id="produtorRuralDesde" maxlength="4" />
+                                </div>
+                                <div class="col-sm-3 col-xs-12" data-type="textbox">
+                                    <label>Inscri&ccedil;&atilde;o Estadual</label>
+                                    <input type="text" class="form-control" name="inscricaoEstadual" id="inscricaoEstadual" />
+                                </div>
+                                <div class="col-sm-2 col-xs-12" data-type="combo">
+                                    <label>Enegia El&eacute;trica?</label>
+                                    <select class="form-control" name="energiaEletrica" id="energiaEletrica">
+                                        <option value="1">Sim</option>
+                                        <option value="0">N&atilde;o</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-2 col-xs-12" data-type="combo">
+                                    <label>Acesso a Propriedade</label>
+                                    <select class="form-control" name="acessoPropriedade" id="acessoPropriedade">
+                                        <option value="0">Bom o ano todo</option>
+                                        <option value="1"> Ruim apenas no per&iacute;odo de chuvas</option>
+                                        <option value="2">Ruim o ano todo</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group fs-clearfix">
+                                <div class="col-sm-5 col-xs-12" data-type="checkbox">
+                                    <label>Meio de Transporte</label>
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" id="bicicleta" />Bicicleta</label>
+                                        <label><input type="checkbox" id="carro" />Carro</label>
+                                        <label><input type="checkbox" id="moto" />Moto</label>
+                                        <label><input type="checkbox" id="onibus" />&Ocirc;nibus</label>
+                                        <label><input type="checkbox" id="outros" />Outros</label>
+                                        <label><input type="checkbox" id="nenhumTransporte" />Nenhum</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 col-xs-12" data-type="textbox" id="divOutroMeioTransporte" style="display: none">
+                                    <label>Outros *</label>
+                                    <input type="text" class="form-control" name="outroMeioTransporte" id="outroMeioTransporte" />
+                                </div>
+                            </div>
+                            <div class="form-group fs-clearfix">
+                                <div class="col-sm-2 col-xs-12" data-type="combo" style="cursor: not-allowed">
+                                    <label>Cadeia Produtiva *</label>
+                                    <!--select class="form-control" name="cadeiaProdutiva" id="cadeiaProdutiva">
+										<option value="1">Bovinocultura de Leite</option>
+										<option value="2">Bovinocultura de Corte</option>
+										<option value="3">Piscicultura</option>
+										<option value="4">Apicultura</option>
+										<option value="5">Fruticultura</option>
+										<option value="6">Horticultura</option>
+										<option value="7">Ovinocaprinocultura</option>
+										<option value="8">Avicultura</option>
+										<option value="9">Agricultura</option>
+									</select-->
+                                    <select class="form-control" name="cadeiaProdutiva" id="cadeiaProdutiva" readonly style="pointer-events: none; touch-action: none">
+                                        <option value="">Selecione</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-2 col-xs-12" data-type="combo" style="cursor: not-allowed">
+                                    <label>Programa / Projeto *</label>
+                                    <select class="form-control" name="projetoPrograma" id="projetoPrograma" readonly style="pointer-events: none; touch-action: none">
+                                        <option value="">Selecione</option>
+                                    </select>
+                                </div>
+                                <div class="form-group fs-clearfix">
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <input type="text" id="codParceiro" name="codParceiro" style="display: none" />
+                                        <div class="form-field" data-type="zoomfield" data-show-properties="" data-field-name="in_buscaParceiro">
+                                            <div class="form-input">
+                                                <div class="input-group col-md-12">
+                                                    <label for="zoom">Parceiro *</label>
+                                                    <input name="in_buscaParceiro" id="in_buscaParceiro" type="zoom" class="form-control" data-zoom="{
+						      							'displayKey':'NOME',
+						      							'filterValues':'',
+						      							'datasetId':'rm_senar_entidades_parceiras_readview_offline',
+						      							'fields':[
+						      								{'field':'CODCFO','label':'C&oacute;digo'},
+						      								{'field':'NOME','label':'Nome','search':true,'standard':true}
+						      						]}" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group fs-clearfix">
+                                    <div class="col-sm-2 col-xs-12" data-type="combo">
+                                        <label>Status * </label>
+                                        <select class="form-control" name="statusPropriedade" id="statusPropriedade">
+                                            <option value="">Selecione</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2 col-xs-12" id="divDataInclusao">
+                                        <label>Data Inclus&atilde;o *</label>
+                                        <input type="date" id="dataInclusao" name="dataInclusao" class="form-control" readonly />
+                                    </div>
+                                    <div class="col-sm-2 col-xs-12" id="divDataDesistencia">
+                                        <label>Data Desist&ecirc;ncia *</label>
+                                        <input type="date" id="dataDesistencia" name="dataDesistencia" class="form-control" />
+                                    </div>
+                                    <!--
+                                    <div class="col-sm-2 col-xs-12" data-button-name="btnAdicionarHistorico">
+                                        <button class="btn btn-primary btn-block" id="btnAdicionarHistorico">Mover para Hist&oacute;rico</button>
+                                    </div>
+                                    -->
+                                </div>
+                                <div class="form-group fs-clearfix" id="divJustificativaStatus">
+                                    <div class="col-md-12 col-xs-12">
+                                        <label for="justificativaStatus">Justificativa</label>
+                                        <textarea id="justificativaStatus" name="justificativaStatus" class="form-control" rows="4"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset id="fsDocumentos">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Documentos</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group fs-clearfix">
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="display: none">
+                                    <div class="form-group">
+                                        <label for="exampleInputFile">Termo de Compromisso</label>
+                                        <input type="file" id="documentoTermoCompromisso" accept="application/pdf" data-url="/ecm/upload" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="divArquivoCompromisso">
+                                    <p class="help-block">
+                                        <span class="required text-danger"><strong>Aten&ccedil;&atilde;o</strong>! S&oacute; ser&aacute; poss&iacute;vel anexar apenas um <strong>Termo de Compromisso</strong></span>
+                                    </p>
+                                    <fieldset class="clearfix">
+                                        <label for="exampleInputFile">Termo de Compromisso</label>
+                                        <div class="form-group">
+                                            <div class="btn-group">
+                                                <a name="btnAttach" id="btnAttach" class="btn btn-md" title="Anexar Arquivo" onclick="javascript:document.getElementById('documentoTermoCompromisso').click();">
+                                                    <i class="fluigicon fluigicon-paperclip icon-sm" style="color: #58595b"></i> Escolher Arquivo
+                                                </a>
+                                            </div>
+                                            <div class="btn-group">
+                                                <a name="btnView" id="btnView" class="btn btn-md disabled" disabled title="Visualizar Arquivo">
+                                                    <i class="fluigicon fluigicon-file-pdf icon-sm" style="color: #ff0000"></i> Visualizar Arquivo
+                                                </a>
+                                            </div>
+                                            <div class="btn-group">
+                                                <a name="btnRemove" id="btnRemove" class="btn btn-md disabled" disabled title="Remover Arquivo">
+                                                    <i class="fluigicon fluigicon-trash icon-sm" style="color: #8b0000"></i> Remover Arquivo
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <!--
+                            <div class="form-group fs-clearfix">
+						        <div class="col-sm-4 col-xs-12">
+							        <div class="form-group">
+								        <label for="exampleInputFile">Termo de Desist&ecirc;ncia</label> 
+							            <input type="file" id="documentoTermoDesistencia" accept="application/pdf">
+					                </div>
+						        </div>
+                                <div class="col-sm-8 col-xs-12">
+					                <div class="form-group" id="divArquivoDesistencia">
+	                                </div>
+                                </div>									
+                            </div>
+                            -->
+                        </div>
+                    </div>
+                </fieldset>
+                <!--
+                <fieldset id="fsHistoricoAteg">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Hist&oacute;rico</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group fs-clearfix">
+                                <div class="col-sm-12 col-xs-12">
+                                    <div id="tabela" class="table-responsive">
+                                        <table class="table table-hover table-bordered table-stripped" id="tabelaHistoricoAteg">
+                                            <thead>
+                                                <th data-column-name="DESCRICAOCADEIAPRODUTIVA">Cadeia Produtiva</th>
+                                                <th data-column-name="DESCRICAOPROGRAMA">Programa / Projeto</th>
+                                                <th data-column-name="DESCRICAOPARCEIRO">Parceiro</th>
+                                                <th data-column-name="DESCRICAOSTATUS">Status</th>
+                                                <th data-column-name="DATAINCLUSAO">Data Inclus&atilde;o</th>
+                                                <th data-column-name="DATADESISTENCIA">Data Desist&ecirc;ncia</th>
+                                                <th data-column-name="ID">Visualizar</th>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                -->
+                <fieldset id="fsAreas" style="display: none">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">&Aacute;reas</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group fs-clearfix">
+                                <div class="col-sm-12 col-xs-12">
+                                    <div id="tabela" class="table-responsive">
+                                        <table class="table table-hover table-bordered table-stripped" id="tabelaAreas">
+                                            <thead>
+                                                <th>Id</th>
+                                                <th>Nome</th>
+                                                <th>Latitude</th>
+                                                <th>Longitude</th>
+                                                <th></th>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group fs-clearfix">
+                                <div class="col-sm-12 col-xs-12">
+                                    <button class="btn btn-primary btn-block" id="btnAdicionarArea">Adicionar &Aacute;rea</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset id="fsEndereco">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Endere&ccedil;o</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group fs-clearfix" id="divlocalizacao">
+                                <legend>Localiza&ccedil;&atilde;o</legend>
+                                <div class="col-sm-2 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-xs-12">
+                                            <label>Dist&acirc;ncia do Munic&iacute;pio (KM) *</label>
+                                            <input type="number" class="form-control" name="distanciaMunicipio" id="distanciaMunicipio" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12 col-xs-12">
+                                            <label>Roteiro Acesso</label>
+                                            <input type="text" class="form-control" name="roteiroAcesso" id="roteiroAcesso" maxlength="100" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12 col-xs-12">
+                                            <label>Latitude *</label>
+                                            <input type="number" class="form-control" name="latitude" id="latitude" disabled />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12 col-xs-12">
+                                            <label>Longitude *</label>
+                                            <input type="number" class="form-control" name="longitude" id="longitude" disabled />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12 col-xs-12">
+                                            <label>Editar</label><br />
+                                            <input id="editarMapa" type="checkbox" data-on-text="Sim" data-off-text="N&atilde;o" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-10 col-xs-12" id="divAuxMap">
+                                    <div id="googleMaps">
+                                        <div>
+                                            <span style="font-weight: bold">Local:</span>
+                                            <input type="text" size="60" id="query" />
+                                            <input type="button" value="Consultar" id="btnConsultar" onclick="submitQuery()" />
+                                        </div>
+                                        <div id="suggestions" style="display: none"></div>
+                                        <div id="options" style="display: none">
+                                            <span style="font-weight: bold">Bias this viewport:</span>
+                                            <input type="checkbox" id="biasViewport" />
+                                            <span style="font-weight: bold">Country bias:</span>
+                                            <input type="text" size="2" id="country" />
+                                        </div>
+                                    </div>
+                                    <div id="responseInfo">
+                                        <div id="responseStatus">
+                                            <div>
+                                                <span style="font-weight: bold">Geocoder response: </span>
+                                                <span id="statusValue"></span> (<span id="statusDescription"></span>)
+                                            </div>
+                                        </div>
+                                        <div id="responseCount">
+                                            <span style="font-weight: bold">Matches returned:</span>
+                                            <span id="matchCount"></span>
+                                        </div>
+                                    </div>
+                                    <div id="mapcontainer">
+                                        <div id="map"></div>
+                                        <div id="boundsLegend" style="display: none">Bounds</div>
+                                        <div id="viewportLegend" style="display: none">Viewport</div>
+                                    </div>
+                                    <div id="matches" style="display: none"></div>
+                                </div>
+                                <div class="col-sm-10 col-xs-12 hidden" id="divMapaPropriedade">
+                                    <div id="mapaPropriedade">
+                                        <img src="https://maps.googleapis.com/maps/api/staticmap?autoscale=1&size=600x600&maptype=hybrid&format=png&visual_refresh=true&markers=size:mid%7Ccolor:0xff0000%7Clabel:P%7C-15.867874,-50.537924" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group fs-clearfix">
+                                <div class="col-sm-2 col-xs-12" data-type="textbox">
+                                    <label>CEP </label>
+                                    <input type="text" class="form-control" name="cep" id="cep" />
+                                </div>
+                                <div class="col-sm-4 col-xs-12" data-type="textbox">
+                                    <label>Rua </label>
+                                    <input type="text" class="form-control" name="rua" id="rua" />
+                                </div>
+                                <div class="col-sm-1 col-xs-12" data-type="textbox">
+                                    <label>N&ordm;</label>
+                                    <input type="text" class="form-control" name="numero" id="numero" />
+                                </div>
+                                <div class="col-sm-4 col-xs-12" data-type="textbox">
+                                    <label>Complemento</label>
+                                    <input type="text" class="form-control" name="complemento" id="complemento" />
+                                </div>
+                            </div>
+                            <div class="form-group fs-clearfix">
+                                <div class="col-sm-2 col-xs-12" data-type="textbox">
+                                    <label>Bairro </label>
+                                    <input type="text" class="form-control" name="bairro" id="bairro" />
+                                </div>
+                                <div class="col-sm-2 col-xs-12" data-type="combo">
+                                    <label>Estado *</label>
+                                    <select class="form-control" name="estado" id="estado" onblur="BuscaMunicipio();">
+                                        <option value="">Selecione</option>
+                                        <option value="AC">AC - Acre</option>
+                                        <option value="AL">AL - Alagoas</option>
+                                        <option value="AM">AM - Amazonas</option>
+                                        <option value="AP">AP - Amap&aacute;</option>
+                                        <option value="BA">BA - Bahia</option>
+                                        <option value="CE">CE - Cear&aacute;</option>
+                                        <option value="DF">DF - Distrito Federal</option>
+                                        <option value="ES">ES - Esp&iacute;rito Santo</option>
+                                        <option value="GO">GO - Goi&aacute;s</option>
+                                        <option value="MA">MA - Maranh&atilde;o</option>
+                                        <option value="MG">MG - Minas Gerais</option>
+                                        <option value="MS">MS - Mato Grosso do Sul</option>
+                                        <option value="MT">MT - Mato Grosso</option>
+                                        <option value="PA">PA - Par&aacute;</option>
+                                        <option value="PB">PB - Para&iacute;ba</option>
+                                        <option value="PE">PE - Pernambuco</option>
+                                        <option value="PI">PI - Piau&iacute;</option>
+                                        <option value="PR">PR - Paran&aacute;</option>
+                                        <option value="RJ">RJ - Rio de Janeiro</option>
+                                        <option value="RN">RN - Rio Grande do Norte</option>
+                                        <option value="RO">RO - Rond&ocirc;nia</option>
+                                        <option value="RR">RR - Roraima</option>
+                                        <option value="RS">RS - Rio Grande do Sul</option>
+                                        <option value="SC">SC - Santa Catarina</option>
+                                        <option value="SE">SE - Sergipe</option>
+                                        <option value="SP">SP - S&atilde;o Paulo</option>
+                                        <option value="TO">TO - Tocantins</option>
+                                        <option value="US">US - Estados Unidos</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-3 col-xs-12">
+                                    <div class="form-field" data-type="zoomfield" data-show-properties="" data-field-name="codMunicipio">
+                                        <div class="form-input">
+                                            <div class="input-group col-md-12">
+                                                <label for="zoom">Munic&iacute;pio *</label>
+                                                <input type="zoom" class="form-control" name="codMunicipio" id="codMunicipio" dataset="rm_municipio_estado" datasetvalue="nmMunicipio" data-zoom="{ 
+													'datasetId': 'rm_municipio_estado', 
+													'displayKey':'nmMunicipio',
+													'fields':[ 
+														{ 'field': 'cdEstado', 'label': 'Estado'}, 
+														{ 'field': 'cdMunicipio', 'label': 'C&oacute;digo', 'standard':true}, 
+														{ 'field': 'nmMunicipio', 'label': 'Munic&iacute;pio', 'search':true} 
+											    ]}" />
+                                                <div class="input-group-addon zoom-preview">
+                                                    <span class="fluigicon fluigicon-zoom-in" onclick="BuscaMunicipio();"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 col-xs-12" data-type="textbox" style="display: none">
+                                    <label>Cod. Munic&iacute;pio</label>
+                                    <input type="text" class="form-control" name="codigoMunicipio" id="codigoMunicipio" readonly="readonly" />
+                                </div>
+                                <div class="col-sm-2 col-xs-12" data-type="textbox" style="display: none">
+                                    <label>Munic&iacute;pio</label>
+                                    <input type="text" class="form-control" name="descMunicipio" id="descMunicipio" readonly="readonly" />
+                                </div>
+                                <!-- 
+								<div class="col-sm-2 col-xs-12" data-type="textbox">
+									<label>Telefone</label>
+									<input type="text" class="form-control" name="telefone" id="telefone">
+								</div>
+							    -->
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <button class="btn btn-primary btn-block" id="btnSalvarDadosPropriedade" style="display: none">Salvar</button>
+                <button class="btn btn-primary btn-block" id="btnNovoPropriedade" style="display: none">Nova Propriedade</button>
+            </div>
+        </div>
+    </div>
+    <div id="divGoogleMaps"></div>
+</body>
+<script src="/ecm_resources/resources/assets/forms/forms.js" type="text/javascript"></script>
+<script src="/ecm_resources/resources/assets/forms/wdkdetail.js" type="text/javascript"></script>
+
+</html>

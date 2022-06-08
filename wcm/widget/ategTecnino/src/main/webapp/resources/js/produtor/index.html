@@ -1,0 +1,1124 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cadastro de Produtores - SENAR MAIS</title>
+    <!-- *** CUSTOM *** -->
+    <link rel="stylesheet" type="text/css" href="/portal/resources/style-guide/css/fluig-style-guide.min.css">
+    <link rel="stylesheet" type="text/css" href="/portal/resources/style-guide/css/fluig-style-guide-flat.min.css">
+    <script src="/portal/resources/js/jquery/jquery.js"></script>
+    <script src="/portal/resources/js/jquery/jquery-ui.min.js"></script>
+    <script src="/portal/resources/js/mustache/mustache-min.js"></script>
+    <script src="/portal/resources/style-guide/js/fluig-style-guide.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/portal/resources/style-guide/css/fluig-style-guide-filter.min.css">
+    <link rel="stylesheet" type="text/css" href="/portal/resources/style-guide/css/fluig-style-guide-ratingstars.min.css">
+    <script src="/portal/resources/style-guide/js/fluig-style-guide-filter.min.js"></script>
+    <script src="/portal/resources/style-guide/js/fluig-style-guide-ratingstars.min.js"></script>
+    <script src="/webdesk/vcXMLRPC.js"></script>
+    <!-- CUSTOM -->
+    <script src="/ategTecnico/resources/js/produtor/js/utils/lodash.core.min.js"></script>
+    <script src="/ategTecnico/resources/js/produtor/js/utils/jquery.mask.min.js"></script>
+    <script src="/ategTecnico/resources/js/produtor/js/util.js"></script>
+    <script src="/ategTecnico/resources/js/produtor/js/insert.js"></script>
+    <script src="/ategTecnico/resources/js/produtor/js/imagem.js"></script>
+    <script src="/ategTecnico/resources/js/produtor/js/ConsultaCep.js"></script>
+    <script src="/ategTecnico/resources/js/produtor/js/produtoresCarol.js"></script>
+    <script src="/ategTecnico/resources/js/produtor/js/ProdutorCustom.js"></script>
+</head>
+
+<body>
+    <div class="fluig-style-guide">
+        <div id="divCadastroProdutor" style="display: none;">
+            <fieldset id="fsSolicitante">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Consultar Produtor Rural</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group fs-clearfix" id="divConsultaPessoaFisica">
+                            <div class="form-group fs-clearfix">
+                                <div class="col-sm-2 col-xs-12" data-type="textbox">
+                                    <label>CPF</label>
+                                    <input type="text" class="form-control" name="cpfPessoaFisica" id="cpfPessoaFisica" mask="999.999.999-99" />
+                                </div>
+                                <br />
+                                <button id="btnPesquisar" type="button" class="btn btn-primary">Pesquisar</button>
+                            </div>
+                            <div class="form-group fs-clearfix" id="divNovoProdutor">
+                                <div class="col-sm-3 col-xs-12" data-type="textbox">
+                                    <label>Nome</label>
+                                    <input type="text" class="form-control" name="nomePessoaFisica" id="nomePessoaFisica" onkeyup="maiuscula(this)" />
+                                </div>
+                                <div class="col-sm-2 col-xs-12" data-type="date" data-show-properties="" data-field-name="dataNascimentoPessoaFisica">
+                                    <label>Data Nascimento</label>
+                                    <div class="input-group date" id="divDataNascimentoPessoaFisica">
+                                        <input type="text" class="form-control" name="dataNascimentoPessoaFisica" id="dataNascimentoPessoaFisica" data-date="" mask="99/99/9999" />
+                                        <span class="input-group-addon"> <span class="fluigicon fluigicon-calendar"></span></span>
+                                    </div>
+                                </div>
+                                <br />
+                                <button id="btnAdicionar" type="button" class="btn btn-primary">Adicionar</button>
+                            </div>
+                            <div class="form-group fs-clearfix"></div>
+                        </div>
+                        <div class="form-group fs-clearfix" id="divBuscaPessoaFisica">
+                            <div class="col-sm-8 col-xs-12">
+                                <div class="form-field" data-type="zoomfield" data-show-properties="" data-field-name="buscaPessoaFisica">
+                                    <div class="form-input">
+                                        <label for="zoom">Consulta Pessoa Física</label>
+                                        <div class="input-group">
+                                            <input type="zoom" class="form-control" name="buscaPessoaFisica" id="buscaPessoaFisica" dataset='rm_ppessoa_senar' datasetvalue="CODIGO" data-zoom="{
+												'datasetId':'rm_ppessoa_senar',
+												'fields':[
+													{'field':'CODIGO','label':'Código'},
+													{'field':'NOME','label':'Nome','standard':true,'search':true}
+											]}" />
+                                            <div class="input-group-addon zoom-preview">
+                                                <span class="fluigicon fluigicon-zoom-in"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hidden-inputs">
+                            <input type="text" name="codPessoa" id="codPessoa" hidden="true" />
+                            <input type="text" name="codCfo" id="codCfo" hidden="true" />
+                            <input type="text" name="codVinculo" id="codVinculo" hidden="true" />
+                            <input type="text" name="tipoProcesso" id="tipoProcesso" hidden="true" />
+                            <input type="text" name="numeroProcesso" id="numeroProcesso" hidden="true" />
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset id="fsPessoa">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Pessoal</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="">
+                            <div class="col-sm-10 col-xs-12" style="margin-left: -15px">
+                                <div class="form-group fs-clearfix">
+                                    <div class="col-sm-3 col-xs-12" data-type="textbox">
+                                        <label>Nome <span class="required text-danger"><strong>*</strong></span></label>
+                                        <input type="text" class="form-control" name="nome" id="nome" />
+                                    </div>
+                                    <div class="col-sm-3 col-xs-12" data-type="textbox">
+                                        <label>Nome Social</label>
+                                        <input type="text" class="form-control" name="nomeSocial" id="nomeSocial" style="text-transform: capitalize;" />
+                                    </div>
+                                    <div class="col-sm-3 col-xs-12" data-type="textbox">
+                                        <label>Apelido</label>
+                                        <input type="text" class="form-control" name="apelido" id="apelido" style="text-transform: capitalize;" />
+                                    </div>
+                                    <div class="col-sm-2 col-xs-12" data-type="textbox">
+                                        <label>CPF <span class="required text-danger"><strong>*</strong></span></label>
+                                        <input type="text" class="form-control" name="cgc" id="cgc" />
+                                    </div>
+                                </div>
+                                <div class="form-group fs-clearfix" id="divPessoa">
+                                    <div class="col-sm-2 col-xs-12" data-type="textbox">
+                                        <label>RG</label>
+                                        <input type="number" class="form-control" name="numeroRG" id="numeroRG" />
+                                    </div>
+                                    <div class="col-sm-2 col-xs-12" data-type="textbox">
+                                        <label>Or. Expedidor</label>
+                                        <input type="text" class="form-control" name="orgaoExpedidor" id="orgaoExpedidor" />
+                                    </div>
+                                    <div class="col-sm-2  col-xs-12" data-type="combo">
+                                        <label>Estado Emissor</label>
+                                        <select class="form-control" name="estadoEmissor" id="estadoEmissor">
+											<option value="">Selecione</option>
+											<option value="AC">AC - Acre</option>
+											<option value="AL">AL - Alagoas</option>
+											<option value="AM">AM - Amazonas</option>
+											<option value="AP">AP - Amapá</option>
+											<option value="BA">BA - Bahia</option>
+											<option value="CE">CE - Ceará</option>
+											<option value="DF">DF - Distrito Federal</option>
+											<option value="ES">ES - Espírito Santo</option>
+											<option value="GO">GO - Goiás</option>
+											<option value="MA">MA - Maranhão</option>
+											<option value="MG">MG - Minas Gerais</option>
+											<option value="MS">MS - Mato Grosso do Sul</option>
+											<option value="MT">MT - Mato Grosso</option>
+											<option value="PA">PA - Pará</option>
+											<option value="PB">PB - Paraíba</option>
+											<option value="PE">PE - Pernambuco</option>
+											<option value="PI">PI - Piauí</option>
+											<option value="PR">PR - Paraná</option>
+											<option value="RJ">RJ - Rio de Janeiro</option>
+											<option value="RN">RN - Rio Grande do Norte</option>
+											<option value="RO">RO - Rondônia</option>
+											<option value="RR">RR - Roraima</option>
+											<option value="RS">RS - Rio Grande do Sul</option>
+											<option value="SC">SC - Santa Catarina</option>
+											<option value="SE">SE - Sergipe</option>
+											<option value="SP">SP - São Paulo</option>
+											<option value="TO">TO - Tocantins</option>
+											<option value="--">Outro</option>
+										</select>
+                                    </div>
+                                    <div class="col-sm-2 col-xs-12" data-type="date" data-show-properties="" data-field-name="dataNascimento">
+                                        <label>Data Nascimento <span class="required text-danger"><strong>*</strong></span></label>
+                                        <div class="input-group date" id="divDataNascimento">
+                                            <input type="text" class="form-control" name="dataNascimento" id="dataNascimento" data-date="" mask="99/99/9999" />
+                                            <span class="input-group-addon"><span class="fluigicon fluigicon-calendar"></span></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1 col-xs-12" data-type="textbox">
+                                        <label>Idade</label>
+                                        <input type="text" class="form-control" name="idade" id="idade" />
+                                    </div>
+                                    <div class="col-sm-2  col-xs-12" data-type="combo">
+                                        <label>Sexo <span class="required text-danger"><strong>*</strong></span></label>
+                                        <select class="form-control" name="sexo" id="sexo">
+											<option value="">Selecione</option>
+											<option value="M">Masculino</option>
+											<option value="F">Feminino</option>
+										</select>
+                                    </div>
+                                </div>
+                                <div class="form-group fs-clearfix">
+                                    <div class="col-sm-2  col-xs-12" data-type="combo">
+                                        <label>Estado Civil <span class="required text-danger"><strong>*</strong></span></label>
+                                        <select class="form-control" name="estadoCivil" id="estadoCivil">
+											<option value="">Selecione</option>
+											<option value="C">Casado</option>
+											<option value="D">Desquitado</option>
+											<option value="E">União Estável</option>
+											<option value="I">Divorciado</option>
+											<option value="O">Outros</option>
+											<option value="P">Separado</option>
+											<option value="S">Solteiro</option>
+											<option value="V">Viúvo</option>
+										</select>
+                                    </div>
+                                    <div class="col-sm-2  col-xs-12" data-type="combo">
+                                        <label>Nacionalidade <span class="required text-danger"><strong>*</strong></span></label>
+                                        <select class="form-control" name="nacionalidade" id="nacionalidade">
+											<option value="10">Brasileira</option>
+											<!--<option value="1">Estrangeira</option>-->
+											<option value="50">Outros</option>
+										</select>
+                                    </div>
+                                    <div class="hidden-inputs" data-type="combo">
+                                        <label>Estado Natal</label> <select class="form-control" name="estadoNatal" id="estadoNatal">
+											<option value="">Selecione</option>
+											<option value="AC">AC - Acre</option>
+											<option value="AL">AL - Alagoas</option>
+											<option value="AM">AM - Amazonas</option>
+											<option value="AP">AP - Amapá</option>
+											<option value="BA">BA - Bahia</option>
+											<option value="CE">CE - Ceará</option>
+											<option value="DF">DF - Distrito Federal</option>
+											<option value="ES">ES - Espírito Santo</option>
+											<option value="GO">GO - Goiás</option>
+											<option value="MA">MA - Maranhão</option>
+											<option value="MG">MG - Minas Gerais</option>
+											<option value="MS">MS - Mato Grosso do Sul</option>
+											<option value="MT">MT - Mato Grosso</option>
+											<option value="PA">PA - Pará</option>
+											<option value="PB">PB - Paraíba</option>
+											<option value="PE">PE - Pernambuco</option>
+											<option value="PI">PI - Piauí</option>
+											<option value="PR">PR - Paraná</option>
+											<option value="RJ">RJ - Rio de Janeiro</option>
+											<option value="RN">RN - Rio Grande do Norte</option>
+											<option value="RO">RO - Rondônia</option>
+											<option value="RR">RR - Roraima</option>
+											<option value="RS">RS - Rio Grande do Sul</option>
+											<option value="SC">SC - Santa Catarina</option>
+											<option value="SE">SE - Sergipe</option>
+											<option value="SP">SP - São Paulo</option>
+											<option value="TO">TO - Tocantins</option>
+										</select>
+                                    </div>
+                                    <div class="hidden-inputs">
+                                        <div class="hidden-inputs">
+                                            <input type="text" class="form-control" name="idMunicipioNatal" id="idMunicipioNatal" />
+                                            <input type="text" class="form-control" name="naturalidade" id="naturalidade" />
+                                        </div>
+                                        <div class="form-field" data-type="zoomfield" data-show-properties="" data-field-name="codMunicipioNatal">
+                                            <div class="form-input">
+                                                <!--<label for="zoom">Consulta Município Natal</label>-->
+                                                <label for="zoom">Naturalidade</label>
+                                                <div class="input-group">
+                                                    <input type="zoom" class="form-control" name="codMunicipioNatal" id="codMunicipioNatal" dataset="rm_municipio_estado" datasetvalue="codMunicipioNatal" data-zoom="{
+														'datasetId':'rm_municipio_estado',
+														'displayKey':'nmMunicipio',
+														'fields':[
+															{'field':'cdEstado',	'label':'Estado'},
+															{'field':'cdMunicipio',	'label':'Código',		'standard':true},
+															{'field':'nmMunicipio',	'label':'Município',	'search':true}
+													]}" />
+                                                    <div class="input-group-addon zoom-preview">
+                                                        <span class="fluigicon fluigicon-zoom-in" id="btnMuniciopioNatal"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2  col-xs-12" data-type="combo" style="display: none;">
+                                        <label>Tipo Aluno <span class="required text-danger"><strong>*</strong></span></label>
+                                        <select class="form-control" name="tipoAluno" id="tipoAluno" disabled>
+											<option value="15" selected>Produtor(a) Próprio (PP)</option>
+										</select>
+                                    </div>
+                                    <div class="col-sm-2 col-xs-12" data-type="textbox" data-show-properties="" data-field-name="text_propriet">
+                                        <label>RA</label>
+                                        <input type="text" class="form-control" name="ra" id="ra" />
+                                    </div>
+                                </div>
+                                <div class="form-group fs-clearfix">
+                                    <div class="col-sm-2 col-xs-12" data-type="textbox">
+                                        <label>Telefone </label>
+                                        <input type="text" class="form-control phone" name="telefone" id="telefone" />
+                                    </div>
+                                    <div class="col-sm-2 col-xs-12" data-type="textbox">
+                                        <label>Celular <span class="required text-danger"><strong>*</strong></span></label>
+                                        <input type="text" class="form-control cellphone" name="celular" id="celular" />
+                                    </div>
+                                    <div class="col-sm-4 col-xs-12">
+                                        <label>E-mail</label>
+                                        <input class="form-control" type="email" id="email" name="email" />
+                                    </div>
+                                    <div class="col-sm-3 col-xs-12" data-type="textbox">
+                                        <label>Escolaridade <!--span class="required text-danger"><strong>*</strong></span--></label>
+                                        <select name="escolaridadePessoa" id="escolaridadePessoa" class="form-control">
+											<option value="">Selecione</option>
+											<option value="1">ANALFABETO</option>
+											<option value="2">ATÉ O 5º ANO INCOMPLETO DO ENSINO FUNDAMENTA</option>
+											<option value="3">5° COMPLETO DO ENSINO FUNDAMENTAL</option>
+											<option value="4">DO 6º AO 9ª ANO DO ENSINO FUNDAMENTA</option>
+											<option value="5">ENSINO FUNDAMENTAL COMPLETO</option>
+											<option value="6">ENSINO MÉDIO INCOMPLETO</option>
+											<option value="7">ENSINO MÉDIO COMPLETO</option>
+											<option value="8">EDUCAÇÃO SUPERIOR INCOMPLETO</option>
+											<option value="9">EDUCAÇÃO SUPERIOR COMPLETO</option>
+											<option value="A">PÓS GRAD. INCOMPLETO</option>
+											<option value="B">PÓS GRAD. COMPLETO</option>
+											<option value="C">MESTRADO INCOMPLETO</option>
+											<option value="D">MESTRADO COMPLETO</option>
+											<option value="E">DOUTORADO INCOMPLETO</option>
+											<option value="F">DOUTORADO COMPLETO</option>
+											<option value="G">PÓS DOUTORADO INCOMPLETO</option>
+											<option value="H">PÓS DOUTORADO COMPLETO</option>
+										</select>
+                                    </div>
+                                </div>
+                                <div class="form-group fs-clearfix">
+                                    <!-- Adicionado como hiden em 10/01/2017 -->
+                                    <div class="col-sm-4 col-xs-12" style="display: none;">
+                                        <input type="hidden" name="enderecoCidade" id="enderecoCidade" />
+                                        <div class="form-field" data-type="checkbox" data-show-properties="" data-field-name="'">
+                                            <label for="enderecoRural" class="control-label">É produtor Rural?</label><br />
+                                            <input type="checkbox" name="enderecoRural" id="enderecoRural" class="form-control" data-on-color="success" data-off-color="default" value="" placeholder="" data-size="small" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 col-xs-12">
+                                <div class="text-center">
+                                    <img id="imagem" name="imagem" src="" style="border: 2px solid blue; max-width: 90%;">
+                                </div>
+                                <br/>
+                                <input type="file" id="btnIMagem" name="btnImagem" onchange="ValidaFormato(this.id)" accept=".jpg" class="btn btn-default form-control" />
+                                <br/>
+                                <input type="text" id="imagemHex" name="imagemHex" onclick="ConverteBase64ParaHexadecimal()" hidden="true" />
+                                <input type="text" name="idImagem" id="idImagem" hidden="true" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 
+				<div class="panel panel-default">
+				    <div class="panel-heading">
+				        <h3 class="panel-title">Informações Adicionais</h3>
+				    </div>
+				    <div class="panel-body">
+				        <div class="form-group fs-clearfix">				
+				            <div class="col-sm-2 col-xs-12" data-type="textbox">
+				                <label>Deficiente Fisico</label> 
+								<select class="form-control" name="deficienteFisico" id="deficienteFisico">
+									<option value="">Selecione</option>
+									<option value="0">Não</option>
+									<option value="1">Sim</option>
+								</select>
+				            </div>				
+				            <div class="col-sm-2 col-xs-12" data-type="textbox">
+				                <label>Deficiente Auditivo</label> 
+								<select class="form-control" name="deficienteAuditivo" id="deficienteAuditivo">
+									<option value="">Selecione</option>
+									<option value="0">Não</option>
+									<option value="1">Sim</option>
+								</select>
+				            </div>				
+				            <div class="col-sm-2 col-xs-12" data-type="textbox">
+				                <label>Deficiente Fala</label> 
+								<select class="form-control" name="deficienteFala" id="deficienteFala">
+									<option value="">Selecione</option>
+									<option value="0">Não</option>
+									<option value="1">Sim</option>
+								</select>
+				            </div>				
+				            <div class="col-sm-2 col-xs-12" data-type="textbox">
+				                <label>Deficiente Visual</label> 
+								<select class="form-control" name="deficienteVisual" id="deficienteVisual">
+									<option value="">Selecione</option>
+									<option value="0">Não</option>
+									<option value="1">Sim</option>
+								</select>
+				            </div>				
+				            <div class="col-sm-2 col-xs-12" data-type="textbox">
+				                <label>Deficiente Mental</label> 
+								<select class="form-control" name="deficienteMental" id="deficienteMental">
+									<option value="">Selecione</option>
+									<option value="0">Não</option>
+									<option value="1">Sim</option>
+								</select>
+				            </div>				
+				        </div>
+				        <div class="form-group fs-clearfix">
+				            <div class="col-sm-2 col-xs-12" data-type="textbox">
+				                <label>Etnia</label> 
+								<select class="form-control" name="etniaPessoa" id="etniaPessoa">
+									<option value="">Selecione</option>
+									<option value="0">Indígena</option>
+									<option value="2">Branca</option>
+									<option value="4">Negra</option>
+									<option value="6">Amarela</option>
+									<option value="8">Parda</option>
+									<option value="9">Não informado</option>
+									<option value="10">Não declarado</option>
+								</select>
+				            </div>				
+				            <div class="col-sm-2 col-xs-12" data-type="textbox">
+				                <label>Renda Familiar</label> 
+								<select class="form-control" name="rendaFamiliarPessoa" id="rendaFamiliarPessoa">
+									<option value="">Selecione</option>
+									<option value="1">Até 1/2 salário mínimo</option>
+									<option value="2">De 1/2 a 1 salário mínimo</option>
+									<option value="3">De 1 a 3 salário mínimo</option>
+									<option value="4">De 3 a 5 salário mínimo</option>
+									<option value="5">De 5 a 10 salário mínimo</option>
+									<option value="6">Acima de 10 salário mínimo</option>
+								</select>
+				            </div>				
+				            <div class="hidden-inputs" data-type="textbox">
+				                <label>Tipo Sanguineo</label> 
+								<select class="form-control" name="tipoSanguineo" id="tipoSanguineo">
+									<option value="">Selecione</option>
+									<option value="A+">A+</option>
+									<option value="A-">A-</option>
+									<option value="B+">B+</option>
+									<option value="B-">B-</option>
+									<option value="AB+">AB+</option>
+									<option value="AB-">AB-</option>
+									<option value="O+">O+</option>
+									<option value="O-">O-</option>
+								</select>
+				            </div>				
+				            <div class="hidden-inputs" data-type="textbox">
+				                <label>Titulo Eleitor</label> 
+								<input type="text" class="form-control" name="tituloEleitor" id="tituloEleitor"/>
+				            </div>				
+				            <div class="hidden-inputs" data-type="textbox">
+				                <label>Zona</label> 
+								<input type="text" class="form-control" name="tituloEleitorZona" id="tituloEleitorZona"/>
+				            </div>				
+				            <div class="hidden-inputs" data-type="textbox">
+				                <label>Seção</label> 
+								<input type="text" class="form-control" name="tituloEleitorSecao" id="tituloEleitorSecao"/>
+				            </div>				
+				        </div>				
+				    </div>
+				</div>
+				-->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Endereço</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group fs-clearfix">
+                            <div class="col-sm-2 col-xs-12" data-type="textbox">
+                                <label>CEP </label>
+                                <input type="text" class="form-control cep" name="cep" id="cep" />
+                            </div>
+                            <div class="col-sm-4 col-xs-12" data-type="textbox">
+                                <label>Rua </label>
+                                <input type="text" class="form-control" name="rua" id="rua" />
+                            </div>
+                            <div class="col-sm-1 col-xs-12" data-type="textbox">
+                                <label>N° </label>
+                                <input type="text" class="form-control" name="numero" id="numero" />
+                            </div>
+                            <div class="col-sm-4 col-xs-12" data-type="textbox">
+                                <label>Complemento</label>
+                                <input type="text" class="form-control" name="complemento" id="complemento" />
+                            </div>
+                        </div>
+                        <div class="form-group fs-clearfix">
+                            <div class="col-sm-2 col-xs-12" data-type="textbox">
+                                <label>Bairro </label>
+                                <input type="text" class="form-control" name="bairro" id="bairro" />
+                            </div>
+                            <div class="col-sm-2  col-xs-12" data-type="combo">
+                                <label>Estado </label>
+                                <select class="form-control" name="estado" id="estado">
+									<option value="--">Selecione</option>
+									<option value="AC">AC - Acre</option>
+									<option value="AL">AL - Alagoas</option>
+									<option value="AM">AM - Amazonas</option>
+									<option value="AP">AP - Amapá</option>
+									<option value="BA">BA - Bahia</option>
+									<option value="CE">CE - Ceará</option>
+									<option value="DF">DF - Distrito Federal</option>
+									<option value="ES">ES - Espírito Santo</option>
+									<option value="GO">GO - Goiás</option>
+									<option value="MA">MA - Maranhão</option>
+									<option value="MG">MG - Minas Gerais</option>
+									<option value="MS">MS - Mato Grosso do Sul</option>
+									<option value="MT">MT - Mato Grosso</option>
+									<option value="PA">PA - Pará</option>
+									<option value="PB">PB - Paraíba</option>
+									<option value="PE">PE - Pernambuco</option>
+									<option value="PI">PI - Piauí</option>
+									<option value="PR">PR - Paraná</option>
+									<option value="RJ">RJ - Rio de Janeiro</option>
+									<option value="RN">RN - Rio Grande do Norte</option>
+									<option value="RO">RO - Rondônia</option>
+									<option value="RR">RR - Roraima</option>
+									<option value="RS">RS - Rio Grande do Sul</option>
+									<option value="SC">SC - Santa Catarina</option>
+									<option value="SE">SE - Sergipe</option>
+									<option value="SP">SP - São Paulo</option>
+									<option value="TO">TO - Tocantins</option>
+								</select>
+                            </div>
+                            <div class="col-sm-2  col-xs-12" data-type="combo">
+                                <div class="hidden-inputs">
+                                    <input type="text" class="form-control" name="codigoMunicipio" id="codigoMunicipio" />
+                                    <input type="text" class="form-control" name="descMunicipio" id="descMunicipio" />
+                                </div>
+                                <label for="">Município *</label>
+                                <select class="form-control" name="codMunicipio" id="codMunicipio">
+									<option value="">Selecione...</option>
+								</select>
+                            </div>
+                            <!--
+							<div class="col-sm-2 col-xs-12">
+								<div class="hidden-inputs">
+									<input type="text" class="form-control" name="codigoMunicipio" id="codigoMunicipio" /> 
+									<input type="text" class="form-control" name="descMunicipio" id="descMunicipio" />
+								</div>
+								<div class="form-field" data-type="zoomfield" data-show-properties="" data-field-name="codMunicipio">
+									<div class="form-input">
+										<label for="zoom">Consulta Município</label>
+										<label for="">Município *</label>
+										<div class="input-group">
+											<input type="zoom" class="form-control" name="codMunicipio" id="codMunicipio" dataset="rm_municipio_estado" datasetvalue="cdMunicipio" data-zoom="{
+												'datasetId':'rm_municipio_estado',
+												'displayKey':'nmMunicipio',
+												'fields':[
+													{'field':'cdEstado','label':'Estado'},
+													{'field':'cdMunicipio','label':'Código','standard':true},
+													{'field':'nmMunicipio','label':'Município','search':true}
+											]}"/>
+											<div class="input-group-addon zoom-preview">
+												<span class="fluigicon fluigicon-zoom-in" id="btnMunicipio"></span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							-->
+                        </div>
+                    </div>
+                </div>
+                <!-- 
+				<div class="panel panel-default">
+				    <div class="panel-heading">
+				        <h3 class="panel-title">Endereço Trabalho</h3>
+				    </div>
+				    <div class="panel-body">			
+				        <div class="form-group fs-clearfix">
+				            <div class="col-sm-4  col-xs-12" data-type="combo">
+				                <label>Local Trabalho</label> <input type="text" class="form-control" name="localTrabalho" id="localTrabalho"/>
+				            </div>
+				        </div>			
+				        <div class="form-group fs-clearfix">
+				            <div class="col-sm-2 col-xs-12" data-type="textbox">
+				                <label>CEP</label> 
+								<input type="text" class="form-control" name="cepEnderecoTrabalho" id="cepEnderecoTrabalho"/>
+				            </div>			
+				            <div class="col-sm-4 col-xs-12" data-type="textbox">
+				                <label>Rua</label> 
+								<input type="text" class="form-control" name="ruaEnderecoTrabalho" id="ruaEnderecoTrabalho"/>
+				            </div>			
+				            <div class="col-sm-1 col-xs-12" data-type="textbox">
+				                <label>N°</label> 
+								<input type="text" class="form-control" name="numeroEnderecoTrabalho" id="numeroEnderecoTrabalho"/>
+				            </div>			
+				            <div class="col-sm-4 col-xs-12" data-type="textbox">
+				                <label>Complemento</label> 
+								<input type="text" class="form-control" name="complementoEnderecoTrabalho" id="complementoEnderecoTrabalho"/>
+				            </div>
+				        </div>
+				        <div class="form-group fs-clearfix">
+				            <div class="col-sm-2 col-xs-12" data-type="textbox">
+				                <label>Bairro</label> 
+								<input type="text" class="form-control" name="bairroEnderecoTrabalho" id="bairroEnderecoTrabalho"/>
+				            </div>			
+				            <div class="col-sm-2  col-xs-12" data-type="combo">
+				                <label>Estado</label> 
+								<select class="form-control" name="estadoEnderecoTrabalho" id="estadoEnderecoTrabalho">
+									<option value="--">Selecione</option>
+									<option value="AC">AC - Acre</option>
+									<option value="AL">AL - Alagoas</option>
+									<option value="AM">AM - Amazonas</option>
+									<option value="AP">AP - Amapá</option>
+									<option value="BA">BA - Bahia</option>
+									<option value="CE">CE - Ceará</option>
+									<option value="DF">DF - Distrito Federal</option>
+									<option value="ES">ES - Espírito Santo</option>
+									<option value="GO">GO - Goiás</option>
+									<option value="MA">MA - Maranhão</option>
+									<option value="MG">MG - Minas Gerais</option>
+									<option value="MS">MS - Mato Grosso do Sul</option>
+									<option value="MT">MT - Mato Grosso</option>
+									<option value="PA">PA - Pará</option>
+									<option value="PB">PB - Paraíba</option>
+									<option value="PE">PE - Pernambuco</option>
+									<option value="PI">PI - Piauí</option>
+									<option value="PR">PR - Paraná</option>
+									<option value="RJ">RJ - Rio de Janeiro</option>
+									<option value="RN">RN - Rio Grande do Norte</option>
+									<option value="RO">RO - Rondônia</option>
+									<option value="RR">RR - Roraima</option>
+									<option value="RS">RS - Rio Grande do Sul</option>
+									<option value="SC">SC - Santa Catarina</option>
+									<option value="SE">SE - Sergipe</option>
+									<option value="SP">SP - São Paulo</option>
+									<option value="TO">TO - Tocantins</option>
+								</select>
+				            </div>			
+				            <div class="col-sm-2 col-xs-12">
+				                <div class="hidden-inputs">
+				                    <input type="text" class="form-control" name="idMunicipioEnderecoTrabalho" id="idMunicipioEnderecoTrabalho" />
+				                    <input type="text" class="form-control" name="descMunicipioEnderecoTrabalho" id="descMunicipioEnderecoTrabalho" />
+				                </div>
+				                <div class="form-field" data-type="zoomfield" data-show-properties="" data-field-name="codMunicipioEnderecoTrabalho">
+				                    <div class="form-input">		
+				                        <label for="zoom">Município</label>
+				                        <div class="input-group">
+				                            <input type="zoom" class="form-control" name="codMunicipioEnderecoTrabalho" id="codMunicipioEnderecoTrabalho" dataset="rm_municipio_estado" datasetvalue="cdMunicipio" data-zoom="{
+												'datasetId':'rm_municipio_estado',
+												'displayKey':'nmMunicipio',
+												'fields':[
+													{'field':'cdEstado','label':'Estado'},
+													{'field':'cdMunicipio','label':'Código','standard':true},
+													{'field':'nmMunicipio','label':'Município','search':true}
+											]}"/>
+				                            <div class="input-group-addon zoom-preview">
+				                                <span class="fluigicon fluigicon-zoom-in" id="btnMunicipioEndTrab"></span>
+				                            </div>
+				                        </div>
+				                    </div>
+				                </div>
+				            </div>			
+				            <div class="col-sm-2 col-xs-12" data-type="textbox">
+				                <label>Telefone</label> 
+								<input type="text" class="form-control" name="telefoneEnderecoTrabalho" id="telefoneEnderecoTrabalho"/>
+				            </div>
+				        </div>			
+				    </div>			
+				</div>
+				-->
+                <div class="panel panel-default" style="display: none;" id="divPropriedadeRural" name="divPropriedadeRural">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Dados da Propriedade Rural</h3>
+                    </div>
+                    <div class="panel-body">
+                        <!-- Inputs Hidden de Carregamento -->
+                        <div class="hidden-inputs">
+                            <input type="hidden" name="idPropriedade" id="idPropriedade" value="" />
+                            <input type="hidden" name="ramoAtividade" id="ramoAtividade" value="16" />
+                            <!-- 16 - Produtor Rural  -->
+                        </div>
+                        <div class="form-group fs-clearfix" id="divVinculoFcfoPpessoa" name="divVinculoFcfoPpessoa" style="display: none;">
+                            <div class="col-sm-5 col-xs-12">
+                                <div class="form-field" data-type="zoomfield" data-show-properties="" data-field-name="vinculoFcfoPpessoa">
+                                    <div class="form-input">
+                                        <!--<label for="zoom">Consulta Município Natal</label>-->
+                                        <label for="zoom">Empresa</label>
+                                        <div class="input-group">
+                                            <input type="zoom" class="form-control" name="vinculoFcfoPpessoa" id="vinculoFcfoPpessoa" dataset="rm_wsConsulta_Fluig003_VinculoFCFO" datasetvalue="CODCFO" data-zoom="{
+												'datasetId':'rm_wsConsulta_Fluig003_VinculoFCFO',
+												'displayKey':'NOME_CFO',
+												'fields':[
+													{'field':'CODCFO',	'label':'Código'},
+													{'field':'NOME_CFO',	'label':'Nome',		'standard':true},
+													{'field':'INSCRESTADUAL',	'label':'',	'search':true}
+											]}" />
+                                            <div class="input-group-addon zoom-preview">
+                                                <span class="fluigicon fluigicon-zoom-in" id="btnMuniciopioNatal"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="text" id="codigoVinculoFcfoPpessoa" name="codigoVinculoFcfoPpessoa" hidden="true" />
+                            </div>
+                        </div>
+                        <div class="form-group fs-clearfix">
+                            <div class="col-sm-5 col-xs-12" style="display: none;" id="divConsultaPropriedadeRural" name="divConsultaPropriedadeRural">
+                                <div class="form-field" data-type="zoomfield" data-show-properties="" data-field-name="propriedadeRural">
+                                    <div class="form-input">
+                                        <!--<label for="zoom">Consulta Município Natal</label>-->
+                                        <label for="zoom">Propriedade Rural</label>
+                                        <div class="input-group">
+                                            <input type="zoom" class="form-control" name="propriedadeRural" id="propriedadeRural" dataset="rm_propriedaderural_readviewauth" datasetvalue="CODCFO" data-zoom="{
+												'datasetId':'rm_propriedaderural_readviewauth',
+												'displayKey':'NOME',
+												'fields':[
+													{'field':'ID','label':'ID'},
+													{'field':'CODCFO','label':'Código','standard':true},
+													{'field':'NOME','label':'Nome','search':true},
+													{'field':'INSCRESTADUAL','label':'Insc. Estadual'}
+											]}" />
+                                            <div class="input-group-addon zoom-preview">
+                                                <span class="fluigicon fluigicon-zoom-in" id="btnMuniciopioNatal"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="text" id="idPropriedadeRural" name="idPropriedadeRural" hidden="true" />
+                            </div>
+                            <div class="col-sm-4 col-xs-12" id="divBtnAdicionarPropriedade" name="divBtnAdicionarPropriedade">
+                                <br />
+                                <button id="btnAdicionarPropriedade" type="button" class="btn btn-default">Nova Propriedade</button>
+                            </div>
+                        </div>
+                        <div id="divCampoPropriedadeRural" name="divCampoPropriedadeRural">
+                            <div class="form-group fs-clearfix">
+                                <div class="col-sm-4 col-xs-12" id="divInputPropriedade">
+                                    <div class="form-field" data-type="textbox" data-show-properties="" data-field-name="nmPropriedade">
+                                        <label for="nmPropriedade" class="control-label">Nome da Propriedade Rural</label>
+                                        <input type="text" name="nmPropriedade" id="nmPropriedade" class="form-control" value="" placeholder="" data-size="small" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 col-xs-12">
+                                    <div class="form-field" data-type="textbox" data-show-properties="" data-field-name="inscricaoEstadual">
+                                        <label for="inscricaoEstadual" class="control-label">Inscri&ccedil;&atilde;o Estadual</label>
+                                        <input type="text" name="inscricaoEstadual" id="inscricaoEstadual" class="form-control" maxlength="12" value="" placeholder="" data-size="small" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 col-xs-12">
+                                    <div class="form-field" data-type="combobox" data-show-properties="" data-field-name="tipoPropriedade">
+                                        <label for="tipoPropriedade" class="control-label">Tipo de Propriedade</label>
+                                        <select class="form-control" name="tipoPropriedade" id="tipoPropriedade" data-size="small">
+											<option value="--">Selecione</option>
+											<option value="propria">Pr&oacute;pria</option>
+											<option value="arrendada">Arrendada</option>
+											<!--option value="alugada">Alugada</option-->
+										</select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group fs-clearfix">
+                                <div class="col-sm-2 col-xs-12">
+                                    <div class="form-field" data-type="textbox" data-show-properties="" data-field-name="nirf">
+                                        <label for="nirf" class="control-label">NIRF</label>
+                                        <input type="text" name="nirf" id="nirf" class="form-control" value="" placeholder="" data-size="small" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 col-xs-12">
+                                    <div class="form-field" data-type="textbox" data-show-properties="" data-field-name="ccir">
+                                        <label for="ccir" class="control-label">CCIR</label> <input type="text" name="ccir" id="ccir" class="form-control" value="" placeholder="" data-size="small" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 col-xs-12">
+                                    <div class="form-field" data-type="textbox" data-show-properties="" data-field-name="dap">
+                                        <label for="dap" class="control-label">DAP</label> <input type="text" name="dap" id="dap" class="form-control" value="" placeholder="" data-size="small" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 col-xs-12">
+                                    <div class="form-field" data-type="textbox" data-show-properties="" data-field-name="areaTotalPropriedade">
+                                        <label for="areaTotalPropriedade" class="control-label">&Aacute;rea
+											Total</label>
+                                        <div class="input-group">
+                                            <input type="text" name="areaTotalPropriedade" id="areaTotalPropriedade" class="form-control" maxlength="14" value="" placeholder="" data-size="small" /> <span class="input-group-addon">ha</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-12">
+                                    <div class="form-field" data-type="zoomfield" data-show-properties="" data-field-name="atividadeEconomica">
+                                        <div class="form-input">
+                                            <label for="zoom" class="control-label">Atividade Econ&ocirc;mica</label>
+                                            <div class="input-group">
+                                                <input type="zoom" class="form-control" name="atividadeEconomica" id="atividadeEconomica" value="" placeholder="" data-size="small" data-zoom="{
+													'datasetId':'rm_smtgrauriscodata_readviewauth_mobile',
+													'displayKey':'DESCRICAO',
+													'fields':[
+														{'field':'CNAE','label':'CNAE'},
+														{'field':'DESCRICAO','label':'Descrição','standard':true,'search':true},
+														{'field':'GRAURISCO','label':'Grau Risco'}
+												]}" />
+                                                <div class="input-group-addon zoom-preview">
+                                                    <span class="fluigicon fluigicon-zoom-in"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group fs-clearfix">
+                                <div class="col-sm-2 col-xs-12">
+                                    <div class="form-field" data-type="textbox" data-show-properties="" data-field-name="produtorRuralDesde">
+                                        <label for="produtorRuralDesde" class="control-label">Produtor Rural Desde (Ano)</label>
+                                        <input type="number" name="produtorRuralDesde" id="produtorRuralDesde" class="form-control" maxlength="4" value="" placeholder="" data-size="small" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-12">
+                                    <div class="form-field" data-type="combobox" data-show-properties="" data-field-name="acessoPropriedade">
+                                        <label for="acessoPropriedade" class="control-label">Acesso &agrave; Propriedade</label><br />
+                                        <select class="form-control" name="acessoPropriedade" id="acessoPropriedade" data-size="small">
+											<option value="--">Selecione</option>
+											<option value="bomAnoTodo">Bom o Ano Todo</option>
+											<option value="ruimAnoTodo">Ruim o Ano Todo</option>
+											<option value="ruimPeriodoChuva">Ruim apenas no Per&iacute;odo Chuvoso
+											</option>
+											<option value="ruimPeriodoSeca">Ruim apenas no Per&iacute;odo Seco</option>
+										</select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-12">
+                                    <div class="form-field" data-type="combobox" data-show-properties="" data-field-name="sucessaoPropriedade" id="divSucessaoPropriedade">
+                                        <label for="sucessaoPropriedade" class="control-label">Sucess&atilde;o Filhos</label>
+                                        <select class="form-control" name="sucessaoPropriedade" id="sucessaoPropriedade" data-size="small">
+											<option value="--">Selecione</option>
+											<option value="continuaraoAtividade">Continuar&atilde;o na Atividade
+											</option>
+											<option value="trocaraoAtividade">Trocar&atilde;o a Atividade</option>
+											<option value="deixaraoMeioRural">Deixar&atilde;o o Meio Rural</option>
+											<option value="venderaoPropriedade">Vender&atilde;o a Propriedade</option>
+										</select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 col-xs-12">
+                                    <input type="hidden" name="energiaEletrica" id="energiaEletrica" />
+                                    <div class="form-field" data-type="checkbox" data-show-properties="" data-field-name="possuiEnergia">
+                                        <label for="possuiEnergia" class="control-label">Energia El&eacute;trica?</label><br />
+                                        <input type="checkbox" name="possuiEnergia" id="possuiEnergia" class="form-control" data-on-color="success" data-off-color="default" value="" placeholder="" data-size="small" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group fs-clearfix">
+                                <div class="col-sm-8 col-xs-12">
+                                    <div class="form-field" data-type="checkbox" data-show-properties="" data-field-name="mtCarroProprio">
+                                        <label for="mtCarroProprio" class="control-label">Meio de Transporte</label>
+                                        <div class="checkbox">
+                                            <label> 
+												<input type="checkbox" name="mtCarroProprio" id="mtCarroProprio" value="mtCarroProprio" data-size="small"> Carro Pr&oacute;prio.
+											</label>
+                                            <label> 
+												<input type="checkbox" name="mtMotoProprio" id="mtMotoProprio" value="mtMotoProprio" data-size="small"/> Moto Pr&oacute;pria.
+											</label>
+                                            <label> 
+												<input type="checkbox" name="mtBicicleta" id="mtBicicleta" value="mtBicicleta" data-size="small"/> Bicicleta.
+											</label>
+                                            <label>
+												 <input type="checkbox" name="mtOnibus" id="mtOnibus" value="mtOnibus" data-size="small"/> &Ocirc;nibus.
+											</label>
+                                            <label> 
+												<input type="checkbox" name="mtOutros" id="mtOutros" value="mtOutros" data-size="small"/> Outros.
+											</label>
+                                            <label> 
+												<input type="checkbox" name="mtNenhum" id="mtNenhum" value="mtNenhum" data-size="small"/> Nenhum Meio de Transp.
+											</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-12" id="divMeioTransporte">
+                                    <div class="form-field" data-type="textbox" data-show-properties="" data-field-name="outroMeioTransporte">
+                                        <label for="outroMeioTransporte" class="control-label">Outro Meio de Transporte</label>
+                                        <input type="text" name="outroMeioTransporte" id="outroMeioTransporte" class="form-control" value="" placeholder="Informe o(s) Meio(s) de Transporte" data-size="small" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group fs-clearfix">
+                                <div class="col-sm-3 col-xs-12">
+                                    <input type="hidden" name="propriedadeAfetadaEstiagens" id="propriedadeAfetadaEstiagens" />
+                                    <div class="form-field" data-type="checkbox" data-show-properties="" data-field-name="propAfetadaEstiagens">
+                                        <label for="propAfetadaEstiagens" class="control-label">Afetada por Estiagens Prolongadas?</label>
+                                        <br />
+                                        <input type="checkbox" name="propAfetadaEstiagens" id="propAfetadaEstiagens" class="form-control" data-on-color="success" data-off-color="default" value="" placeholder="" data-size="small" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-12" id="divEstiagemMesesPAno">
+                                    <div class="form-field" data-type="textbox" data-show-properties="" data-field-name="estiagemMesesPAno">
+                                        <label for="estiagemMesesPAno" class="control-label">Quantos Meses por Ano?</label>
+                                        <input type="text" name="estiagemMesesPAno" id="estiagemMesesPAno" class="form-control" maxlength="2" value="" placeholder="" data-size="small" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-12" id="divTecnologiaPraAdversidade">
+                                    <input type="hidden" name="tecnologiaPraAdversidade" id="tecnologiaPraAdversidade" />
+                                    <div class="form-field" data-type="checkbox" data-show-properties="" data-field-name="tecnologiaPAdversidade">
+                                        <label for="tecnologiaPAdversidade" class="control-label">Utiliza Tecnologia nas Adversidades?</label>
+                                        <br />
+                                        <input type="checkbox" name="tecnologiaPAdversidade" id="tecnologiaPAdversidade" class="form-control" data-on-color="success" data-off-color="default" value="" placeholder="" data-size="small" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-12" id="divQuaisTecnologias">
+                                    <div class="form-field" data-type="textbox" data-show-properties="" data-field-name="quaisTecnologias">
+                                        <label for="quaisTecnologias" class="control-label">Quais Tecnologias?</label>
+                                        <input type="text" name="quaisTecnologias" id="quaisTecnologias" class="form-control" value="" placeholder="" data-size="small" hidden="true" />
+                                    </div>
+                                </div>
+                            </div>
+                            <fieldset class="clearfix">
+                                <legend>
+                                    <h3 class="panel-title">Endere&ccedil;o</h3>
+                                </legend>
+                                <div class="form-group fs-clearfix">
+                                    <div class="col-sm-2 col-xs-12">
+                                        <div class="form-field" data-type="textbox" data-show-properties="" data-field-name="cepPropriedade">
+                                            <label for="cepPropriedade" class="control-label">CEP</label>
+                                            <input type="text" class="form-control" name="cepPropriedade" id="cepPropriedade" maxlength="10" value="" placeholder="" data-size="small" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 col-xs-12">
+                                        <div class="form-field" data-type="textbox" data-show-properties="" data-field-name="logradouroPropriedade">
+                                            <label for="logradouroPropriedade" class="control-label">Logradouro</label>
+                                            <input type="text" class="form-control" name="logradouroPropriedade" id="logradouroPropriedade" value="" placeholder="" data-size="small" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1 col-xs-12">
+                                        <div class="form-field" data-type="textbox" data-show-properties="" data-field-name="numeroPropriedade">
+                                            <label for="numeroPropriedade" class="control-label">N&#186;</label>
+                                            <input type="text" class="form-control" name="numeroPropriedade" id="numeroPropriedade" value="" placeholder="" data-size="small" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 col-xs-12">
+                                        <div class="form-field" data-type="textbox" data-show-properties="" data-field-name="complementoPropriedade">
+                                            <label for="complementoPropriedade" class="control-label">Complemento</label>
+                                            <input type="text" class="form-control" name="complementoPropriedade" id="complementoPropriedade" value="" placeholder="" data-size="small" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group fs-clearfix">
+                                    <div class="col-sm-2 col-xs-12">
+                                        <div class="form-field" data-type="textbox" data-show-properties="" data-field-name="bairroPropriedade">
+                                            <label for="bairroPropriedade" class="control-label">Bairro</label>
+                                            <input type="text" class="form-control" name="bairroPropriedade" id="bairroPropriedade" value="" placeholder="" data-size="small" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2 col-xs-12">
+                                        <div class="form-field" data-type="combobox" data-show-properties="" data-field-name="estadoPropriedade">
+                                            <label for="estadoPropriedade" class="control-label">Estado</label>
+                                            <select class="form-control" name="estadoPropriedade" id="estadoPropriedade" data-size="small">
+												<option value="--">Selecione</option>
+												<option value="AC">AC - Acre</option>
+												<option value="AL">AL - Alagoas</option>
+												<option value="AM">AM - Amazonas</option>
+												<option value="AP">AP - Amap&aacute;</option>
+												<option value="BA">BA - Bahia</option>
+												<option value="CE">CE - Cear&aacute;</option>
+												<option value="DF">DF - Distrito Federal</option>
+												<option value="ES">ES - Esp&iacute;rito Santo</option>
+												<option value="GO">GO - Goi&aacute;s</option>
+												<option value="MA">MA - Maranh&atilde;o</option>
+												<option value="MG">MG - Minas Gerais</option>
+												<option value="MS">MS - Mato Grosso do Sul</option>
+												<option value="MT">MT - Mato Grosso</option>
+												<option value="PA">PA - Par&aacute;</option>
+												<option value="PB">PB - Para&iacute;ba</option>
+												<option value="PE">PE - Pernambuco</option>
+												<option value="PI">PI - Piau&iacute;</option>
+												<option value="PR">PR - Paran&aacute;</option>
+												<option value="RJ">RJ - Rio de Janeiro</option>
+												<option value="RN">RN - Rio Grande do Norte</option>
+												<option value="RO">RO - Rond&ocirc;nia</option>
+												<option value="RR">RR - Roraima</option>
+												<option value="RS">RS - Rio Grande do Sul</option>
+												<option value="SC">SC - Santa Catarina</option>
+												<option value="SE">SE - Sergipe</option>
+												<option value="SP">SP - S&atilde;o Paulo</option>
+												<option value="TO">TO - Tocantins</option>
+											</select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-xs-12">
+                                        <div class="hidden-inputs">
+                                            <input type="text" class="form-control" name="codMunicipioPropriedade" id="codMunicipioPropriedade" />
+                                        </div>
+                                        <div class="form-field" data-type="zoomfield" data-show-properties="" data-field-name="municipioPropriedade">
+                                            <div class="form-input">
+                                                <!--<label for="zoom">Consulta Município Natal</label>-->
+                                                <label for="zoom">Município</label>
+                                                <div class="input-group">
+                                                    <input type="zoom" class="form-control" name="municipioPropriedade" id="municipioPropriedade" dataset="rm_municipio_estado" datasetvalue="cdMunicipio" data-zoom="{
+														'datasetId':'rm_municipio_estado',
+														'displayKey':'cdMunicipio',
+														'fields':[
+															{'field':'cdEstado', 'label':'Estado'},
+															{'field':'cdMunicipio',	'label':'Código', 'standard':true},
+															{'field':'nmMunicipio',	'label':'Município', 'search':true}
+													]}">
+                                                    <div class="input-group-addon zoom-preview">
+                                                        <span class="fluigicon fluigicon-zoom-in" id="btnMuniciopioNatal"></span>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset class="clearfix">
+                                <legend>
+                                    <h3 class="panel-title">Localiza&ccedil;&atilde;o</h3>
+                                </legend>
+                                <div class="form-group fs-clearfix">
+                                    <div class="col-sm-3 col-xs-12">
+                                        <div class="form-field" data-type="textbox" data-show-properties="" data-field-name="distanciaMunicipio">
+                                            <label for="distanciaMunicipio" class="control-label">Dist&acirc;ncia do Munic&iacute;pio</label>
+                                            <div class="input-group">
+                                                <input type="text" name="distanciaMunicipio" id="distanciaMunicipio" class="form-control" maxlength="10" value="" placeholder="" data-size="small" /> <span class="input-group-addon">Km</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-xs-12">
+                                        <div class="form-field" data-type="textbox" data-show-properties="" data-field-name="roteiroAcesso">
+                                            <label for="roteiroAcesso" class="control-label">Roteiro Acesso</label>
+                                            <input type="text" name="roteiroAcesso" id="roteiroAcesso" class="form-control" value="" placeholder="" data-size="small" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-xs-12">
+                                        <div class="form-field" data-type="textbox" data-show-properties="" data-field-name="latitude">
+                                            <label for="latitude" class="control-label">Latitude</label>
+                                            <input type="number" name="latitude" id="latitude" class="form-control" value="" placeholder="" data-size="small" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-xs-12">
+                                        <div class="form-field" data-type="textbox" data-show-properties="" data-field-name="longitude">
+                                            <label for="longitude" class="control-label">Longitude</label>
+                                            <input type="number" name="longitude" id="longitude" class="form-control" value="" placeholder="" data-size="small" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                        <div class="form-field" data-type="textbox" data-show-properties="" data-field-name="mapa">
+                                            <label for="mapa" class="control-label">&nbsp;</label>
+                                            <div class="alert" role="alert" id="mapa"></div>
+                                            <div id="showMap"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default" id="divDadosFamimiliar" name="divDadosFamimiliar">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Dados Familiares</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-hover table-bordered table-stripped" id="tabelaDependente">
+                            <thead>
+                                <th>ID</th>
+                                <th>Código</th>
+                                <th>Nome</th>
+                                <th>Grau Parentesco</th>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--<button class="btn btn-primary btn-block" id="btnDependente">Dependente</button>-->
+                </div>
+                <button class="btn btn-primary btn-block" id="btnSalvarDadosProdutor" style="display: none;">Salvar</button>
+                <button class="btn btn-primary btn-block" id="btnNovoProdutor" style="display: none;">Novo Produtor</button>
+            </fieldset>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        //permite digitar somente numeros
+        $('body').on('keypress', '[data-only-numbers]', function(ev) {
+            var k = ev.keyCode || ev.which;
+            //Permite apagar o conte&atilde;ÃÂÃÂÃÂ&atilde;ÃÂÃÂÃÂºdo do campo usando as teclas 'backspace' ou 'delete' no firefox.
+            //Nos outros navegadores o keypress n&atilde;ÃÂÃÂÃÂ&atilde;ÃÂÃÂÃÂ£o gera evento.
+            if (k == 8 || k == 46) {
+                return true;
+            }
+            k = String.fromCharCode(k);
+            if (isNaN(k)) {
+                return false;
+            }
+            return true;
+        });
+
+        $('.create-form-components').on('keyup', 'input[required="required"][type="text"], input[required="required"][type="number"], input[required="required"][type="date"], textarea[required="required"]', function() {
+            validationFieldsForm($(this), $(this).parents('.form-field').data('type'));
+        });
+
+        $('.create-form-components').on('change', 'input[required="required"][type="checkbox"], input[required="required"][type="radio"], select[required="required"]', function() {
+            validationFieldsForm($(this), $(this).parents('.form-field').data('type'));
+        });
+
+        function validationFieldsForm(field, type) {
+            if (type === "checkbox" || type === "radio") {
+                if (!field.is(':checked')) {
+                    field.parents('.form-field').addClass('required');
+                } else {
+                    field.parents('.form-field').removeClass('required');
+                }
+            } else {
+                if (!field.val().trim()) {
+                    field.parents('.form-field').addClass('required');
+                } else {
+                    field.parents('.form-field').removeClass('required');
+                }
+            }
+        }
+
+        var $zoomPreview = $(".zoom-preview");
+        if ($zoomPreview.length) {
+            $zoomPreview.parent().removeClass("input-group");
+            $zoomPreview.remove();
+        }
+
+        var ratings = $(".rating");
+        if (ratings.length > 0)
+            ratingStars(ratings);
+
+        function ratingStars(stars) {
+            $.each(stars, function(i, obj) {
+                var field = $(this).closest(".form-group").find(
+                    ".rating-value");
+                var tgt = $(obj);
+                tgt.html("");
+                var rating = FLUIGC.stars(tgt, {
+                    value: field.val()
+                });
+                rating.on("click", function(o) {
+                    field.val($(this).index() + 1);
+                });
+            });
+        }
+
+        $.each($("[data-date]"), function(i, o) {
+            var id = $(o).parent().attr("id");
+            FLUIGC.calendar("#" + id);
+        });
+    </script>
+</body>
+<script src="/ecm_resources/resources/assets/forms/forms.js" type="text/javascript"></script>
+<script src="/ecm_resources/resources/assets/forms/wdkdetail.js" type="text/javascript"></script>
+
+</html>

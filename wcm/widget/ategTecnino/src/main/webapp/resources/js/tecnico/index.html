@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+	    <meta http-equiv="cache-control" content="no-cache" />
+	    <meta http-equiv="pragma" content="no-cache" />
+	    <meta http-equiv="expires" content="0" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="/portal/resources/style-guide/css/fluig-style-guide.min.css" rel="stylesheet" type="text/css">
+		<link href="/portal/resources/style-guide/css/fluig-style-guide-flat.min.css" rel="stylesheet" type="text/css">
+		<script src="/portal/resources/js/jquery/jquery.js" type="text/javascript"></script>
+		<script src="/portal/resources/js/jquery/jquery-ui.min.js" type="text/javascript"></script>
+		<script src="/portal/resources/js/mustache/mustache-min.js" type="text/javascript"></script>
+		<script src="/portal/resources/style-guide/js/fluig-style-guide.min.js" type="text/javascript"></script>
+		<link href="/portal/resources/style-guide/css/fluig-style-guide-filter.min.css" rel="stylesheet" type="text/css">
+		<link href="/portal/resources/style-guide/css/fluig-style-guide-ratingstars.min.css" rel="stylesheet" type="text/css">
+		<script src="/portal/resources/style-guide/js/fluig-style-guide-filter.min.js" type="text/javascript"></script>
+		<script src="/portal/resources/style-guide/js/fluig-style-guide-ratingstars.min.js" type="text/javascript"></script>
+		<script src="/webdesk/vcXMLRPC.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div class="fluig-style-guide">
+	
+			<div id="divCadastroProdutor" style="display: none;">
+	
+	
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Tecnico</h3>
+					</div>
+					<div class="panel-body">
+	
+						<fieldset id="fsSolicitante">
+							<div class="form-group fs-clearfix" id="divConsultaPessoaFisica">
+								<div class="col-sm-3 col-xs-12" data-type="textbox">
+									<label>Nome</label> <input type="text" class="form-control" name="nomePessoaFisica" id="nomePessoaFisica"
+										onkeyup="maiuscula(this)" />
+								</div>
+	
+								<div class="col-sm-2 col-xs-12" data-type="textbox">
+									<label>CPF</label> <input type="text" class="form-control" name="cpfPessoaFisica" id="cpfPessoaFisica"
+										mask="999.999.999-99">
+								</div>
+	
+								<div class="col-sm-2 col-xs-12" data-type="date" data-show-properties=""
+									data-field-name="dataNascimentoPessoaFisica">
+									<label>Data Nascimento</label>
+									<div class="input-group date" id="divDataNascimentoPessoaFisica">
+										<input type="text" class="form-control" name="dataNascimentoPessoaFisica" id="dataNascimentoPessoaFisica"
+											data-date="" mask="99/99/9999"> <span class="input-group-addon"> <span
+											class="fluigicon fluigicon-calendar"></span>
+										</span>
+									</div>
+								</div>
+	
+								<div class="form-group">
+									<br />
+									<button id="btnPesquisar" type="button" class="btn btn-primary">Pesquisar</button>
+	
+									<button id="btnAdicionar" type="button" class="btn btn-primary">Adicionar</button>
+								</div>
+							</div>
+	
+							<div class="form-group fs-clearfix" id="divBuscaPessoaFisica">
+								<div class="col-sm-8 col-xs-12">
+									<div class="form-field" data-type="zoomfield" data-show-properties="" data-field-name="buscaPessoaFisica">
+										<div class="form-input">
+											<label for="zoom">Consulta Pessoa Física</label>
+											<div class="input-group">
+												<input type="zoom" class="form-control" name="buscaPessoaFisica" id="buscaPessoaFisica"
+													dataset='rm_ppessoa_senar' datasetvalue="CODIGO"
+													data-zoom="{
+																				'datasetId':'rm_ppessoa_senar',
+																				'fields':[
+																					{'field':'CODIGO','label':'Código'},
+																					{'field':'NOME','label':'Nome','standard':true,'search':true}
+																				]}">
+												<div class="input-group-addon zoom-preview">
+													<span class="fluigicon fluigicon-zoom-in"></span>
+												</div>
+	
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+	
+	
+	
+							<div class="hidden-inputs">
+								<input type="text" name="codCfo" id="codCfo" hidden="true"> <input type="text" name="codVinculo"
+									id="codVinculo" hidden="true"> <input type="text" name="tipoProcesso" id="tipoProcesso" hidden="true">
+								<input type="text" name="numeroProcesso" id="numeroProcesso" hidden="true">
+							</div>
+						</fieldset>
+	
+						<fieldset id="fsTabs" style="display: none;">
+							<ul class="nav nav-tabs" role="tablist" id="TabAbas">
+								<li class="active"><a href="#aba1" role="tab" data-toggle="tab" aria-expanded="true">Técnico</a></li>
+								<li class=""><a href="#aba2" role="tab" data-toggle="tab" aria-expanded="false">Empresa</a></li>
+								<li class=""><a href="#tabContratos" role="tab" data-toggle="tab" aria-expanded="false">Contratos</a></li>
+	
+							</ul>
+							<div class="tab-content">
+	
+								<div class="tab-pane active" id="aba1">
+	
+	
+									<fieldset id="fsPessoa">
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<h3 class="panel-title">Pessoal</h3>
+											</div>
+	
+											<div class="panel-body">
+	
+												<input type="text" name="codPessoa" id="codPessoa"> <input type="text" name="codProfessor"
+													id="codProfessor">
+	
+												<div class="">
+													<div class="col-sm-10 col-xs-12" style="margin-left: -15px">
+														<div class="form-group fs-clearfix">
+	
+															<div class="col-sm-3 col-xs-12" data-type="textbox">
+																<label>Nome <span class="required text-danger"><strong>*</strong></span></label> <input type="text"
+																	class="form-control" name="nome" id="nome">
+															</div>
+	
+															<div class="col-sm-3 col-xs-12" data-type="textbox">
+																<label>Nome Social</label> <input type="text" class="form-control" name="nomeSocial" id="nomeSocial"
+																	style="text-transform: capitalize;"">
+															</div>
+	
+															<div class="col-sm-3 col-xs-12 " data-type="textbox ">
+																<label>Apelido</label> <input type="text " class="form-control " name="apelido" id="apelido"
+																	style="text-transform: capitalize;"">
+															</div>
+	
+	
+															<div class="col-sm-2 col-xs-12" data-type="textbox">
+																<label>CPF <span class="required text-danger"><strong>*</strong></span></label> <input type="text"
+																	class="form-control" name="cgc" id="cgc">
+															</div>
+	
+														</div>
+	
+														<div class="form-group fs-clearfix" id="divPessoa">
+	
+															<div class="col-sm-2 col-xs-12" data-type="textbox">
+																<label>RG</label> <input type="number" class="form-control" name="numeroRG" id="numeroRG">
+															</div>
+	
+															<div class="col-sm-2 col-xs-12" data-type="textbox">
+																<label>Or. Expedidor</label> <input type="text" class="form-control" name="orgaoExpedidor"
+																	id="orgaoExpedidor">
+															</div>
+	
+															<div class="col-sm-2  col-xs-12" data-type="combo">
+																<label>Estado Emissor</label> <select class="form-control" name="estadoEmissor" id="estadoEmissor">
+																	<option value="">Selecione</option>
+																	<option value="AC">AC - Acre</option>
+																	<option value="AL">AL - Alagoas</option>
+																	<option value="AM">AM - Amazonas</option>
+																	<option value="AP">AP - Amapá</option>
+																	<option value="BA">BA - Bahia</option>
+																	<option value="CE">CE - Ceará</option>
+																	<option value="DF">DF - Distrito Federal</option>
+																	<option value="ES">ES - Espírito Santo</option>
+																	<option value="GO">GO - Goiás</option>
+																	<option value="MA">MA - Maranhão</option>
+																	<option value="MG">MG - Minas Gerais</option>
+																	<option value="MS">MS - Mato Grosso do Sul</option>
+																	<option value="MT">MT - Mato Grosso</option>
+																	<option value="PA">PA - Pará</option>
+																	<option value="PB">PB - Paraíba</option>
+																	<option value="PE">PE - Pernambuco</option>
+																	<option value="PI">PI - Piauí</option>
+																	<option value="PR">PR - Paraná</option>
+																	<option value="RJ">RJ - Rio de Janeiro</option>
+																	<option value="RN">RN - Rio Grande do Norte</option>
+																	<option value="RO">RO - Rondônia</option>
+																	<option value="RR">RR - Roraima</option>
+																	<option value="RS">RS - Rio Grande do Sul</option>
+																	<option value="SC">SC - Santa Catarina</option>
+																	<option value="SE">SE - Sergipe</option>
+																	<option value="SP">SP - São Paulo</option>
+																	<option value="TO">TO - Tocantins</option>
+																	<option value="--">Outro</option>
+																</select>
+															</div>
+	
+															<div class="col-sm-2 col-xs-12" data-type="date" data-show-properties="" data-field-name="dataNascimento">
+																<label>Data Nascimento <span class="required text-danger"><strong>*</strong></span></label>
+																<div class="input-group date" id="divDataNascimento">
+																	<input type="text" class="form-control" name="dataNascimento" id="dataNascimento" data-date=""
+																		mask="99/99/9999" disabled> <span class="input-group-addon"> <span
+																		class="fluigicon fluigicon-calendar"></span>
+																	</span>
+																</div>
+															</div>
+	
+															<div class="col-sm-1 col-xs-12" data-type="textbox">
+																<label>Idade</label> <input type="text" class="form-control" name="idade" id="idade">
+															</div>
+	
+															<div class="col-sm-2  col-xs-12" data-type="combo">
+																<label>Sexo <span class="required text-danger"><strong>*</strong></span></label> <select
+																	class="form-control" name="sexo" id="sexo">
+																	<option value="">Selecione</option>
+																	<option value="M">Masculino</option>
+																	<option value="F">Feminino</option>
+																</select>
+															</div>
+	
+														</div>
+	
+														<div class="form-group fs-clearfix">
+	
+															<div class="col-sm-2  col-xs-12" data-type="combo">
+																<label>Estado Civil <span class="required text-danger"><strong>*</strong></span></label> <select
+																	class="form-control" name="estadoCivil" id="estadoCivil">
+																	<option value="">Selecione</option>
+																	<option value="C">Casado</option>
+																	<option value="D">Desquitado</option>
+																	<option value="E">União Estável</option>
+																	<option value="I">Divorciado</option>
+																	<option value="O">Outros</option>
+																	<option value="P">Separado</option>
+																	<option value="S">Solteiro</option>
+																	<option value="V">Viúvo</option>
+																</select>
+															</div>
+	
+															<div class="col-sm-2  col-xs-12" data-type="combo">
+																<label>Nacionalidade <span class="required text-danger"><strong>*</strong></span></label> <select
+																	class="form-control" name="nacionalidade" id="nacionalidade">
+																	<option value="10">Brasileira</option>
+																	<!--  <option value="1">Estrangeira</option> -->
+																	<option value="50">Outros</option>
+																</select>
+															</div>
+	
+															<div class="col-sm-2  col-xs-12" data-type="combo">
+																<label>Estado Natal</label> <select class="form-control" name="estadoNatal" id="estadoNatal">
+																	<option value="">Selecione</option>
+																	<option value="AC">AC - Acre</option>
+																	<option value="AL">AL - Alagoas</option>
+																	<option value="AM">AM - Amazonas</option>
+																	<option value="AP">AP - Amapá</option>
+																	<option value="BA">BA - Bahia</option>
+																	<option value="CE">CE - Ceará</option>
+																	<option value="DF">DF - Distrito Federal</option>
+																	<option value="ES">ES - Espírito Santo</option>
+																	<option value="GO">GO - Goiás</option>
+																	<option value="MA">MA - Maranhão</option>
+																	<option value="MG">MG - Minas Gerais</option>
+																	<option value="MS">MS - Mato Grosso do Sul</option>
+																	<option value="MT">MT - Mato Grosso</option>
+																	<option value="PA">PA - Pará</option>
+																	<option value="PB">PB - Paraíba</option>
+																	<option value="PE">PE - Pernambuco</option>
+																	<option value="PI">PI - Piauí</option>
+																	<option value="PR">PR - Paraná</option>
+																	<option value="RJ">RJ - Rio de Janeiro</option>
+																	<option value="RN">RN - Rio Grande do Norte</option>
+																	<option value="RO">RO - Rondônia</option>
+																	<option value="RR">RR - Roraima</option>
+																	<option value="RS">RS - Rio Grande do Sul</option>
+																	<option value="SC">SC - Santa Catarina</option>
+																	<option value="SE">SE - Sergipe</option>
+																	<option value="SP">SP - São Paulo</option>
+																	<option value="TO">TO - Tocantins</option>
+																</select>
+															</div>
+	
+															<div class="col-sm-2  col-xs-12">
+																<div class="hidden-inputs">
+																	<input type="text" class="form-control" name="idMunicipioNatal" id="idMunicipioNatal" /> <input
+																		type="text" class="form-control" name="naturalidade" id="naturalidade" />
+																</div>
+																<div class="form-field" data-type="zoomfield" data-show-properties="" data-field-name="codMunicipioNatal">
+																	<div class="form-input">
+																		<!--<label for="zoom">Consulta Município Natal</label>-->
+																		<label for="zoom">Naturalidade</label>
+																		<div class="input-group">
+																			<input type="zoom" class="form-control" name="codMunicipioNatal" id="codMunicipioNatal"
+																				dataset="rm_municipio_estado" datasetvalue="codMunicipioNatal"
+																				data-zoom="{
+																'datasetId':'rm_municipio_estado',
+																'displayKey':'nmMunicipio',
+																'fields':[
+																	{'field':'cdEstado',	'label':'Estado'},
+																	{'field':'cdMunicipio',	'label':'Código',		'standard':true},
+																	{'field':'nmMunicipio',	'label':'Município',	'search':true}
+																	]}">
+																			<div class="input-group-addon zoom-preview">
+																				<span class="fluigicon fluigicon-zoom-in" id="btnMuniciopioNatal"></span>
+																			</div>
+	
+																		</div>
+																	</div>
+																</div>
+															</div>
+	
+														</div>
+	
+														<div class="form-group fs-clearfix">
+	
+															<!-- Adicionado como hiden em 10/01/2017 -->
+															<div class="col-sm-4 col-xs-12" style="display: none;">
+																<input type="hidden" name="enderecoCidade" id="enderecoCidade" />
+																<div class="form-field" data-type="checkbox" data-show-properties="" data-field-name="'">
+																	<label for="enderecoRural" class="control-label">É produtor Rural?</label><br /> <input type="checkbox"
+																		name="enderecoRural" id="enderecoRural" class="form-control" data-on-color="success"
+																		data-off-color="default" value="" placeholder="" data-size="small" />
+																</div>
+															</div>
+	
+														</div>
+	
+													</div>
+													<div class="col-sm-2 col-xs-12">
+														<div class="text-center">
+															<img id="imagem" name="imagem" src="" style="border: 2px solid blue; max-width: 90%;">
+														</div>
+														<br> <input type="file" id="btnIMagem" name="btnImagem" onchange="ValidaFormato(this.id)"
+															accept=".jpg" class="btn btn-default form-control"> <br> <input type="text" id="imagemHex"
+															name="imagemHex" onclick="ConverteBase64ParaHexadecimal()" hidden="true"> <input type="text"
+															name="idImagem" id="idImagem" hidden="true">
+													</div>
+												</div>
+	
+											</div>
+										</div>
+	
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<h3 class="panel-title">Outras Informações</h3>
+											</div>
+											<div class="panel-body">
+	
+												<div class="form-group fs-clearfix">
+	
+													<div class="col-sm-3 col-xs-12" data-type="textbox">
+														<label>Escolaridade <span class="required text-danger"><strong>*</strong></span></label> <select
+															name="escolaridadePessoa" id="escolaridadePessoa" class="form-control">
+															<option value="">Selecione</option>
+															<option value="1">ANALFABETO</option>
+															<option value="2">ATÉ O 5º ANO INCOMPLETO DO ENSINO FUNDAMENTA</option>
+															<option value="3">5° COMPLETO DO ENSINO FUNDAMENTAL</option>
+															<option value="4">DO 6º AO 9ª ANO DO ENSINO FUNDAMENTA</option>
+															<option value="5">ENSINO FUNDAMENTAL COMPLETO</option>
+															<option value="6">ENSINO MÉDIO INCOMPLETO</option>
+															<option value="7">ENSINO MÉDIO COMPLETO</option>
+															<option value="8">EDUCAÇÃO SUPERIOR INCOMPLETO</option>
+															<option value="9">EDUCAÇÃO SUPERIOR COMPLETO</option>
+															<option value="A">PÓS GRAD. INCOMPLETO</option>
+															<option value="B">PÓS GRAD. COMPLETO</option>
+															<option value="C">MESTRADO INCOMPLETO</option>
+															<option value="D">MESTRADO COMPLETO</option>
+															<option value="E">DOUTORADO INCOMPLETO</option>
+															<option value="F">DOUTORADO COMPLETO</option>
+															<option value="G">PÓS DOUTORADO INCOMPLETO</option>
+															<option value="H">PÓS DOUTORADO COMPLETO</option>
+														</select>
+													</div>
+	
+													<div class="col-sm-2 col-xs-12" data-type="textbox" style="display: none;">
+														<label>Atualmente Estuda?</label> <select name="estudandoPessoa" id="estudandoPessoa" class="form-control">
+															<option value="">Selecione</option>
+															<option value="0">Não</option>
+															<option value="1">Sim</option>
+														</select>
+													</div>
+	
+													<div class="col-sm-2 col-xs-12" data-type="textbox" style="display: none;">
+														<label>Pretende Continuar</label> <select name="pretendeContinuarEstudar" id="pretendeContinuarEstudar"
+															class="form-control">
+															<option value="">Selecione</option>
+															<option value="0">Não</option>
+															<option value="1">Sim</option>
+														</select>
+													</div>
+	
+													<div class="col-sm-4 col-xs-12" data-type="textbox" style="display: none;">
+														<div class="hidden-inputs">
+															<input name="ocupacaoAtual" id="ocupacaoAtual" type="text" class="form-control">
+														</div>
+														<div class="form-field" data-type="zoomfield" data-show-properties="" data-field-name="in_buscaProfissao">
+															<div class="form-input">
+																<label for="zoom">Ocupação Atual</label>
+																<div class="input-group">
+																	<input name="in_buscaProfissao" id="in_buscaProfissao" type="zoom" class="form-control"
+																		dataset="ds_grListaProfissoes" datasetvalue="CODCLIENTE"
+																		data-zoom="{
+														'datasetId':'ds_grListaProfissoes',
+														'displayKey':'DESCRICAO',
+														'filterValues':'DESCRICAO,%',
+														'fields':[
+															{'field':'CODCLIENTE',	'label':'Código'},
+															{'field':'CODINTERNO',	'label':'CBO','standard':true},
+															{'field':'DESCRICAO',	'label':'Profissão','search':true}
+															]}">
+																	<div class="input-group-addon zoom-preview">
+																		<span class="fluigicon fluigicon-zoom-in" id="btnProfissao"></span>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+	
+													<div class="col-sm-2 col-xs-12  has-error" data-type="textbox">
+														<label>Há Quanto Tempo Exerce?</label> <input name="haQuantoTempoExerce" id="haQuantoTempoExerce"
+															type="text" class="form-control">
+													</div>
+	
+	
+												</div>
+	
+												<div class="form-group fs-clearfix">
+	
+													<div class="col-sm-6 col-xs-12">
+														<div class="form-field" data-type="zoomfield" data-show-properties="" data-field-name="dsCadeiaProdutiva">
+															<input type="hidden" name="codCadeiaProdutiva" id="codCadeiaProdutiva" /> <label for="dsCadeiaProdutiva"
+																class="control-label">Cadeia Produtiva</label>
+															<div class="input-group">
+																<input type="zoom" class="form-control" name="dsCadeiaProdutiva" id="dsCadeiaProdutiva"
+																	data-zoom="{
+														'displayKey':'nomeCurso',
+														'filterValues':'codTipoCurso,4',
+														'datasetId':'rm_cursos_senar',
+														'fields':[
+															{'field':'codCurso','label':'C&oacute;digo','standard':'true','search':'true'},
+															{'field':'nomeCurso','label':'Nome','standard':'true','search':'true'}]}" />
+																<div class="input-group-addon zoom-preview">
+																	<span class="fluigicon fluigicon-zoom-in"></span>
+																</div>
+															</div>
+														</div>
+													</div>
+	
+												</div>
+	
+												<!-- 
+								<div class="form-group fs-clearfix">
+									<div class="col-sm-12 col-xs-12" data-type="checkbox">
+										<label>Mês Eventos</label>
+										<div class="checkbox" id="mesEvento">
+											<label><input type="checkbox" id="mes_01">Janeiro</label> 
+											<label><input type="checkbox" id="mes_02">Fevereiro</label> 
+											<label><input type="checkbox" id="mes_03">Março</label> 
+											<label><input type="checkbox" id="mes_04">Abril</label> 
+											<label><input type="checkbox" id="mes_05">Maio</label> 
+											<label><input type="checkbox" id="mes_06">Junho</label>
+											<label><input type="checkbox" id="mes_07">Julho</label> 
+											<label><input type="checkbox" id="mes_08">Agosto</label> 
+											<label><input type="checkbox" id="mes_09">Setembro</label> 
+											<label><input type="checkbox" id="mes_10">Outubro</label> 
+											<label><input type="checkbox" id="mes_11">Novembro</label> 
+											<label><input type="checkbox" id="mes_12">Dezembro</label>
+											<label><input type="checkbox" id="mes_00">Todos</label>
+										</div>
+									</div>
+								</div>
+								 -->
+	
+											</div>
+										</div>
+	
+										<!-- 
+					    <div class="panel panel-default">
+					        <div class="panel-heading">
+					            <h3 class="panel-title">Informações Adicionais</h3>
+					        </div>
+					        <div class="panel-body">
+					            <div class="form-group fs-clearfix">
+					
+					                <div class="col-sm-2 col-xs-12" data-type="textbox">
+					                    <label>Deficiente Fisico</label> <select class="form-control" name="deficienteFisico" id="deficienteFisico">
+																<option value="">Selecione</option>
+																<option value="0">Não</option>
+																<option value="1">Sim</option>
+															</select>
+					                </div>
+					
+					                <div class="col-sm-2 col-xs-12" data-type="textbox">
+					                    <label>Deficiente Auditivo</label> <select class="form-control" name="deficienteAuditivo" id="deficienteAuditivo">
+																<option value="">Selecione</option>
+																<option value="0">Não</option>
+																<option value="1">Sim</option>
+															</select>
+					                </div>
+					
+					                <div class="col-sm-2 col-xs-12" data-type="textbox">
+					                    <label>Deficiente Fala</label> <select class="form-control" name="deficienteFala" id="deficienteFala">
+																<option value="">Selecione</option>
+																<option value="0">Não</option>
+																<option value="1">Sim</option>
+															</select>
+					                </div>
+					
+					                <div class="col-sm-2 col-xs-12" data-type="textbox">
+					                    <label>Deficiente Visual</label> <select class="form-control" name="deficienteVisual" id="deficienteVisual">
+																<option value="">Selecione</option>
+																<option value="0">Não</option>
+																<option value="1">Sim</option>
+															</select>
+					                </div>
+					
+					                <div class="col-sm-2 col-xs-12" data-type="textbox">
+					                    <label>Deficiente Mental</label> <select class="form-control" name="deficienteMental" id="deficienteMental">
+																<option value="">Selecione</option>
+																<option value="0">Não</option>
+																<option value="1">Sim</option>
+															</select>
+					                </div>
+					
+					            </div>
+					            <div class="form-group fs-clearfix">
+					                <div class="col-sm-2 col-xs-12" data-type="textbox">
+					                    <label>Etnia</label> <select class="form-control" name="etniaPessoa" id="etniaPessoa">
+																<option value="">Selecione</option>
+																<option value="0">Indígena</option>
+																<option value="2">Branca</option>
+																<option value="4">Negra</option>
+																<option value="6">Amarela</option>
+																<option value="8">Parda</option>
+																<option value="9">Não informado</option>
+																<option value="10">Não declarado</option>
+															</select>
+					                </div>
+					
+					                <div class="col-sm-2 col-xs-12" data-type="textbox">
+					                    <label>Renda Familiar</label> <select class="form-control" name="rendaFamiliarPessoa" id="rendaFamiliarPessoa">
+																<option value="">Selecione</option>
+																<option value="1">Até 1/2 salário mínimo</option>
+																<option value="2">De 1/2 a 1 salário mínimo</option>
+																<option value="3">De 1 a 3 salário mínimo</option>
+																<option value="4">De 3 a 5 salário mínimo</option>
+																<option value="5">De 5 a 10 salário mínimo</option>
+																<option value="6">Acima de 10 salário mínimo</option>
+															</select>
+					                </div>
+					
+					                <div class="hidden-inputs" data-type="textbox">
+					                    <label>Tipo Sanguineo</label> <select class="form-control" name="tipoSanguineo" id="tipoSanguineo">
+																<option value="">Selecione</option>
+																<option value="A+">A+</option>
+																<option value="A-">A-</option>
+																<option value="B+">B+</option>
+																<option value="B-">B-</option>
+																<option value="AB+">AB+</option>
+																<option value="AB-">AB-</option>
+																<option value="O+">O+</option>
+																<option value="O-">O-</option>
+															</select>
+					                </div>
+					
+					                <div class="hidden-inputs" data-type="textbox">
+					                    <label>Titulo Eleitor</label> <input type="text" class="form-control" name="tituloEleitor" id="tituloEleitor">
+					                </div>
+					
+					                <div class="hidden-inputs" data-type="textbox">
+					                    <label>Zona</label> <input type="text" class="form-control" name="tituloEleitorZona" id="tituloEleitorZona">
+					                </div>
+					
+					                <div class="hidden-inputs" data-type="textbox">
+					                    <label>Seção</label> <input type="text" class="form-control" name="tituloEleitorSecao" id="tituloEleitorSecao">
+					                </div>
+					
+					            </div>
+					
+					        </div>
+					    </div>
+					     -->
+	
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<h3 class="panel-title">Endereço</h3>
+											</div>
+	
+											<div class="panel-body">
+	
+												<div class="form-group fs-clearfix">
+													<div class="col-sm-2 col-xs-12" data-type="textbox">
+														<label>CEP <span class="required text-danger"><strong>*</strong></span></label> <input type="text"
+															class="form-control" name="cep" id="cep">
+													</div>
+	
+													<div class="col-sm-4 col-xs-12" data-type="textbox">
+														<label>Rua <span class="required text-danger"><strong>*</strong></span></label> <input type="text"
+															class="form-control" name="rua" id="rua">
+													</div>
+	
+													<div class="col-sm-1 col-xs-12" data-type="textbox">
+														<label>N° <span class="required text-danger"><strong>*</strong></span></label> <input type="text"
+															class="form-control" name="numero" id="numero">
+													</div>
+	
+													<div class="col-sm-4 col-xs-12" data-type="textbox">
+														<label>Complemento</label> <input type="text" class="form-control" name="complemento" id="complemento">
+													</div>
+												</div>
+												<div class="form-group fs-clearfix">
+													<div class="col-sm-2 col-xs-12" data-type="textbox">
+														<label>Bairro <span class="required text-danger"><strong>*</strong></span></label> <input type="text"
+															class="form-control" name="bairro" id="bairro">
+													</div>
+	
+													<div class="col-sm-2  col-xs-12" data-type="combo">
+														<label>Estado <span class="required text-danger"><strong>*</strong></span></label> <select
+															class="form-control" name="estado" id="estado">
+															<option value="--">Selecione</option>
+															<option value="AC">AC - Acre</option>
+															<option value="AL">AL - Alagoas</option>
+															<option value="AM">AM - Amazonas</option>
+															<option value="AP">AP - Amapá</option>
+															<option value="BA">BA - Bahia</option>
+															<option value="CE">CE - Ceará</option>
+															<option value="DF">DF - Distrito Federal</option>
+															<option value="ES">ES - Espírito Santo</option>
+															<option value="GO">GO - Goiás</option>
+															<option value="MA">MA - Maranhão</option>
+															<option value="MG">MG - Minas Gerais</option>
+															<option value="MS">MS - Mato Grosso do Sul</option>
+															<option value="MT">MT - Mato Grosso</option>
+															<option value="PA">PA - Pará</option>
+															<option value="PB">PB - Paraíba</option>
+															<option value="PE">PE - Pernambuco</option>
+															<option value="PI">PI - Piauí</option>
+															<option value="PR">PR - Paraná</option>
+															<option value="RJ">RJ - Rio de Janeiro</option>
+															<option value="RN">RN - Rio Grande do Norte</option>
+															<option value="RO">RO - Rondônia</option>
+															<option value="RR">RR - Roraima</option>
+															<option value="RS">RS - Rio Grande do Sul</option>
+															<option value="SC">SC - Santa Catarina</option>
+															<option value="SE">SE - Sergipe</option>
+															<option value="SP">SP - São Paulo</option>
+															<option value="TO">TO - Tocantins</option>
+														</select>
+													</div>
+	
+													<div class="col-sm-2 col-xs-12">
+														<div class="hidden-inputs">
+															<input type="text" class="form-control" name="codigoMunicipio" id="codigoMunicipio" /> <input type="text"
+																class="form-control" name="descMunicipio" id="descMunicipio" />
+														</div>
+														<div class="form-field" data-type="zoomfield" data-show-properties="" data-field-name="codMunicipio">
+															<div class="form-input">
+																<!-- <label for="zoom">Consulta Município</label> -->
+																<label for="">Município <span class="required text-danger"><strong>*</strong></span></label>
+																<div class="input-group">
+																	<input type="zoom" class="form-control" name="codMunicipio" id="codMunicipio"
+																		dataset="rm_municipio_estado" datasetvalue="cdMunicipio"
+																		data-zoom="{
+																'datasetId':'rm_municipio_estado',
+																'displayKey':'nmMunicipio',
+																'fields':[
+																	{'field':'cdEstado','label':'Estado'},
+																	{'field':'cdMunicipio','label':'Código','standard':true},
+																	{'field':'nmMunicipio','label':'Município','search':true}
+																	]}">
+																	<div class="input-group-addon zoom-preview">
+																		<span class="fluigicon fluigicon-zoom-in" id="btnMunicipio"></span>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+	
+												</div>
+	
+												<div class="form-group fs-clearfix">
+													<div class="col-sm-2 col-xs-12" data-type="textbox">
+														<label>Telefone </label> <input type="text" class="form-control" name="telefone" id="telefone"
+															mask="(99) 9999-9999">
+													</div>
+	
+													<div class="col-sm-2 col-xs-12" data-type="textbox">
+														<label>Confirmar Telefone</label><input type="text" class="form-control" name="confirmaTelefone"
+															id="confirmaTelefone" mask="(99) 9999-9999">
+													</div>
+	
+													<div class="col-sm-2 col-xs-12" data-type="textbox">
+														<label>Celular <span class="required text-danger"><strong>*</strong></span></label> <input type="text"
+															class="form-control" name="celular" id="celular" mask="(99) 99999-9999">
+													</div>
+	
+													<div class="col-sm-2 col-xs-12" data-type="textbox">
+														<label>Confirmar Celular <span class="required text-danger"><strong>*</strong></span></label> <input
+															type="text" class="form-control" name="confirmaCelular" id="confirmaCelular" mask="(99) 99999-9999">
+													</div>
+	
+													<div class="col-sm-2  col-xs-12" data-type="combo">
+														<label>Possui Telefone?</label> <select class="form-control" name="possuiTelefone" id="possuiTelefone">
+															<option value="sim">Sim</option>
+															<option value="nao">Não</option>
+														</select>
+													</div>
+	
+												</div>
+	
+												<div class="form-group fs-clearfix">
+													<div class="col-sm-4 col-xs-12">
+														<label>E-mail</label> <input class="form-control" type="email" id="email" name="email">
+													</div>
+												</div>
+	
+											</div>
+										</div>
+									</fieldset>
+	
+								</div>
+	
+	
+								<div class="tab-pane" id="aba2">
+									<fieldset id="fsEmpresa">
+	
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<h3 class="panel-title">Vínculo</h3>
+											</div>
+	
+											<div class="panel-body">
+	
+												<div class="form-group fs-clearfix" id="divConsulta">
+													<div class="col-sm-3 col-xs-12" data-type="textbox">
+														<label for="nomePropriedade">Nome</label><input type="text" class="form-control" name="nomePropriedade"
+															id="nomePropriedade" placeholder="Digite o nome">
+													</div>
+													<div class="col-sm-3 col-xs-12" data-type="textbox">
+														<label for="cpfCnpj">CPF / CNPJ</label><input type="text" class="form-control" name="cpfCnpj" id="cpfCnpj"
+															placeholder="Digite o CPF / CNPJ">
+													</div>
+	
+													<div class="form-group">
+														<br />
+														<button id="btnPesquisarEmpresa" type="button" class="btn btn-primary">Pesquisar</button>
+														<button id="btnAdicionarEmpresa" type="button" class="btn btn-primary">Adicionar</button>
+													</div>
+	
+												</div>
+	
+												<div class="form-group fs-clearfix" id="divBuscaClienteFornecedor" style="display: none;">
+	
+													<div class="form-group fs-clearfix">
+														<div class="col-sm-7 col-xs-12">
+															<div class="form-field" data-type="zoomfield" data-show-properties=""
+																data-field-name="buscaClienteFornecedor">
+																<div class="form-input">
+																	<label for="buscaClienteFornecedor">Entidade</label>
+																	<div class="input-group">
+																		<input type="zoom" class="form-control" name="buscaClienteFornecedor" id="buscaClienteFornecedor"
+																			dataset="rm_fincfodatabr_readviewauth_cgc" datasetvalue="CODCFO"
+																			data-zoom="{'datasetId':'rm_fincfodatabr_readviewauth_cgc',
+																'fields':[
+																	{'field':'CODCFO','label':'Código'},
+																	{'field':'NOME','label':'Nome','standard':true,'search':true},
+																	{'field':'INSCRESTADUAL','label':'Inscrição Estadual'},
+																	{'field':'CGCCFO','label':'CGC'}
+																]}">
+																		<div class="input-group-addon zoom-preview">
+																			<span class="fluigicon fluigicon-zoom-in"></span>
+																		</div>
+	
+																	</div>
+																</div>
+															</div>
+														</div>
+	
+													</div>
+	
+													<div class="form-group fs-clearfix" id="divDadosVinculo" style="display: none;">
+														<div class="col-sm-3 col-xs-12">
+															<div class="form-field" data-type="zoomfield" data-show-properties="" data-field-name="buscaCargo">
+																<div class="form-input">
+																	<label for="buscaCargo">Cargo</label>
+																	<div class="input-group">
+																		<input type="zoom" class="form-control" name="buscaCargo" id="buscaCargo"
+																			dataset="rm_RMSPRJ4264448Server_readviewauth" datasetvalue="DESCRICAO"
+																			data-zoom="{'datasetId':'rm_RMSPRJ4264448Server_readviewauth','displayKey':'DESCRICAO',
+																		'fields':[
+																			{'field':'ID','label':'Código'},
+																			{'field':'DESCRICAO','label':'Descrição','standard':true,'search':true}
+																		]}">
+																		<div class="input-group-addon zoom-preview">
+																			<span class="fluigicon fluigicon-zoom-in"></span>
+																		</div>
+	
+																	</div>
+																</div>
+																<input type="hidden" class="form-control" name="codigoCargo" id="codigoCargo">
+															</div>
+														</div>
+	
+	
+														<div class="col-sm-2 col-xs-12">
+															<label for="periodoDe">Periodo De:</label> <input type="date" class="form-control" name="periodoDe"
+																id="periodoDe">
+														</div>
+	
+														<div class="col-sm-2 col-xs-12">
+															<label for="periodoAte">Periodo Até:</label> <input type="date" class="form-control" name="periodoAte"
+																id="periodoAte">
+														</div>
+	
+														<div class="col-sm-2 col-xs-12">
+															<label for="statusVinculo">Status</label> <select class="form-control" name="statusVinculo"
+																id="statusVinculo">
+																<option value=""></option>
+																<option value="1">Ativo</option>
+																<option value="0">Inativo</option>
+															</select>
+														</div>
+	
+														<input type="text" class="form-control" name="objVinculoFCFO" id="objVinculoFCFO" style="display: none;">
+	
+														<button class="btn btn-primary btn-block" id="btnVincular">Vincular</button>
+													</div>
+	
+												</div>
+	
+	
+												<!--  
+												<div class="form-group fs-clearfix" id="divDadosEmpresaJuridica">
+	
+													<div class="col-sm-1 col-xs-12" data-type="textbox">
+														<label for="codFCFOEmpresaJuridica">FCFO </label><input type="text" class="form-control"
+															name="codFCFOEmpresaJuridica" id="codFCFOEmpresaJuridica" disabled>
+													</div>
+	
+													<div class="col-sm-1 col-xs-12" data-type="textbox">
+														<label for="vinculoEmpresaJuridica">Vínculo </label><input type="text" class="form-control"
+															name="vinculoEmpresaJuridica" id="vinculoEmpresaJuridica" disabled>
+													</div>
+	
+													<div class="col-sm-3 col-xs-12" data-type="textbox">
+														<label for="nomeEmpresaJuridica">Nome </label><input type="text" class="form-control"
+															name="nomeEmpresaJuridica" id="nomeEmpresaJuridica" disabled>
+													</div>
+	
+													<div class="col-sm-3 col-xs-12" data-type="textbox">
+														<label for="nomeFantasiaEmpresaJuridica">Nome Fantasia </label><input type="text" class="form-control"
+															name="nomeFantasiaEmpresaJuridica" id="nomeFantasiaEmpresaJuridica" disabled>
+													</div>
+	
+													<div class="col-sm-2  col-xs-12" data-type="combo">
+														<label for="tipoPessoaEmpresaJuridica">Tipo Pessoa </label> <select class="form-control"
+															name="tipoPessoaEmpresaJuridica" id="tipoPessoaEmpresaJuridica" disabled>
+															<option value="J">Juridica</option>
+														</select>
+													</div>
+	
+													<div class="col-sm-2 col-xs-12" data-type="textbox">
+														<label for="cgcEmpresaJuridica">CNPJ </label><input type="text" class="form-control"
+															name="cgcEmpresaJuridica" id="cgcEmpresaJuridica" disabled>
+													</div>
+												</div>
+	
+												<div class="form-group fs-clearfix" id="divDadosEmpresaFisica">
+	
+													<div class="col-sm-1 col-xs-12" data-type="textbox">
+														<label for="codFCFOEmpresaFisica">FCFO </label><input type="text" class="form-control"
+															name="codFCFOEmpresaFisica" id="codFCFOEmpresaFisica" disabled>
+													</div>
+	
+													<div class="col-sm-1 col-xs-12" data-type="textbox">
+														<label for="vinculoEmpresaFisica">Vínculo </label><input type="text" class="form-control"
+															name="vinculoEmpresaFisica" id="vinculoEmpresaFisica" disabled>
+													</div>
+	
+													<div class="col-sm-3 col-xs-12" data-type="textbox">
+														<label for="nomeEmpresaFisica">Nome </label><input type="text" class="form-control"
+															name="nomeEmpresaFisica" id="nomeEmpresaFisica" disabled>
+													</div>
+	
+													<div class="col-sm-3 col-xs-12" data-type="textbox">
+														<label for="nomeFantasiaEmpresaFisica">Nome Fantasia </label><input type="text" class="form-control"
+															name="nomeFantasiaEmpresaFisica" id="nomeFantasiaEmpresaFisica" disabled>
+													</div>
+	
+													<div class="col-sm-2  col-xs-12" data-type="combo">
+														<label for="tipoPessoaEmpresaFisica">Tipo Pessoa </label> <select class="form-control"
+															name="tipoPessoaEmpresaFisica" id="tipoPessoaEmpresaFisica" disabled>
+															<option value="F">Fisíca</option>
+														</select>
+													</div>
+	
+													<div class="col-sm-2 col-xs-12" data-type="textbox">
+														<label for="cgcEmpresaFisica">CPF </label><input type="text" class="form-control" name="cgcEmpresaFisica"
+															id="cgcEmpresaFisica" disabled>
+													</div>
+												</div>
+												-->
+	
+	
+	
+											</div>
+	
+	
+	
+										</div>
+	
+	
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<h3 class="panel-title">Empresa</h3>
+											</div>
+	
+											<div class="panel-body">
+	
+												<div class="form-group fs-clearfix">
+													<div class="col-sm-12 col-xs-12">
+														<div id="tabelaVinculo" class="table-responsive">
+															<table class="table table-hover table-bordered table-stripped" id="table">
+																<thead>
+																	<tr>
+																		<th>FCFO</th>
+																		<th>Vínculo</th>
+																		<th>Nome</th>
+																		<th>Nome Fantasia</th>
+																		<th>CPF / CNPJ</th>
+																		<th>Tipo Pessoa</th>
+																		<th>Status</th>
+																		<th>Cargo</th>
+																		<th>Data De</th>
+																		<th>Data Até</th>
+																		<th></th>
+																	</tr>
+																</thead>
+																<tbody>
+																</tbody>
+																<tfoot>
+																</tfoot>
+															</table>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+	
+									</fieldset>
+								</div>
+	
+								<div class="tab-pane" id="tabContratos">
+	
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">Adicionar Contrato</h3>
+										</div>
+	
+										<div class="panel-body">
+											<div class="form-group fs-clearfix">
+												<div class="col-sm-1 col-xs-12">
+													<div class="form-field" data-type="textbox" data-show-properties="" data-field-name="contratoAno">
+														<label for="contratoId">Ano</label> <input type="hidden" id="contratoId" name="contratoId"> <input
+															type="text" name="contratoAno" id="contratoAno" class="form-control" placeholder="" mask="#0000"
+															maxlength="4" />
+													</div>
+												</div>
+	
+												<div class="col-sm-1 col-xs-12">
+													<div class="form-field" data-type="textbox" data-show-properties="" data-field-name="contratoNumDocumento">
+														<label for="contratoNumDocumento">Nº Documento</label> <input type="text" name="contratoNumDocumento"
+															id="contratoNumDocumento" class="form-control" placeholder="" mask="#0000" maxlength="4" />
+													</div>
+												</div>
+	
+												<div class="col-sm-2 col-xs-12">
+													<div class="form-field" data-type="zoomfield" data-show-properties="" data-field-name="buscaTipo">
+														<div class="form-input">
+															<label for="contratoTipo">Tipo</label>
+															<div class="input-group">
+																<input type="zoom" class="form-control" name="contratoTipo" id="contratoTipo"
+																	dataset="rm_RMSPRJ5579520Server" datasetvalue="DESCRICAO"
+																	data-zoom="{'datasetId':'rm_RMSPRJ5579520Server','displayKey':'DESCRICAO',
+																		'fields':[
+																			{'field':'CODIGO','label':'Código'},
+																			{'field':'DESCRICAO','label':'Descrição','standard':true,'search':true}
+																		]}">
+																<div class="input-group-addon zoom-preview">
+																	<span class="fluigicon fluigicon-zoom-in"></span>
+																</div>
+	
+															</div>
+														</div>
+														<input type="hidden" class="form-control" name="codigoTipo" id="codigoTipo">
+													</div>
+												</div>
+	
+												<div class="col-sm-1 col-xs-12">
+													<div class="form-field" data-type="textbox" data-show-properties="" data-field-name="contratoAutorizacao">
+														<label for="contratoAutorizacao">Aturorização</label> <input type="text" class="form-control"
+															name="contratoAutorizacao" id="contratoAutorizacao">
+													</div>
+												</div>
+	
+												<div class="col-sm-2 col-xs-12">
+													<div class="form-field" data-type="textbox" data-show-properties="" data-field-name="contratoPeriodoDe">
+														<label for="contratoPeriodoDe">Emissão</label> <input type="date" class="form-control"
+															name="contratoPeriodoDe" id="contratoPeriodoDe">
+													</div>
+												</div>
+	
+												<div class="col-sm-2 col-xs-12">
+													<div class="form-field" data-type="textbox" data-show-properties="" data-field-name="contratoPeriodoAte">
+														<label for="contratoPeriodoAte">Vencimento</label> <input type="date" class="form-control"
+															name="contratoPeriodoAte" id="contratoPeriodoAte">
+													</div>
+												</div>
+	
+												<div class="col-sm-1 col-xs-12">
+													<label for="contratoStatus">Status</label> <select class="form-control" name="contratoStatus"
+														id="contratoStatus">
+														<option value=""></option>
+														<option value="1">Ativo</option>
+														<option value="0">Inativo</option>
+													</select>
+												</div>
+	
+												<div class="col-sm-2 col-xs-12" >
+													<label for="zoomContratoEmpresa" placeholder="Digite o nome da empresa ou % para consultar todos..">Entidade</label> <input type="text" class="form-control" id="zoomContratoEmpresa">
+														<input type="text" class="form-control" id="codContratoEmpresa" style="display: none;">
+												</div>
+												
+												
+	
+											</div>
+	
+											<div class="form-group fs-clearfix">
+												<button type="button" class="btn btn-primary btn-block" name="btnAdicionarContrato" id="btnAdicionarContrato">Adicionar
+													Contrato</button>
+											</div>
+										</div>
+									</div>
+	
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">Contrato</h3>
+										</div>
+	
+										<div class="panel-body">
+											<div class="form-group fs-clearfix">
+												<div class="col-sm-12 col-xs-12">
+													<div id="tabelaContrato" class="table-responsive">
+														<table class="table table-hover table-bordered table-stripped" id="table">
+															<thead>
+																<tr class="tableHeadRow">
+																	<th class="tableColumn">FCFO</th>
+																	<th class="tableColumn">ID</th>
+																	<th class="tableColumn">Ano</th>
+																	<th class="tableColumn">Nº Documento</th>
+																	<th class="tableColumn">Tipo</th>
+																	<th class="tableColumn">Autorização</th>
+																	<th class="tableColumn">Emissão</th>
+																	<th class="tableColumn">Vencimento</th>
+																	<th class="tableColumn">Status</th>
+																	<th class="tableColumn"></th>
+																</tr>
+															</thead>
+															<tbody>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<button class="btn btn-primary btn-block" id="btnSalvarDadosProdutor" style="display: none;">Salvar</button>
+								<button class="btn btn-primary btn-block" id="btnNovoProdutor" style="display: none;">Novo Produtor</button>
+							</div>
+						</fieldset>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+		<script type="text/javascript">
+				//permite digitar somente numeros
+				$('body').on('keypress', '[data-only-numbers]', function(ev) {
+					var k = ev.keyCode || ev.which;
+					//Permite apagar o conte&atilde;ÃÂÃÂÃÂ&atilde;ÃÂÃÂÃÂºdo do campo usando as teclas 'backspace' ou 'delete' no firefox.
+					//Nos outros navegadores o keypress n&atilde;ÃÂÃÂÃÂ&atilde;ÃÂÃÂÃÂ£o gera evento.
+					if (k == 8 || k == 46) {
+						return true;
+					}
+					k = String.fromCharCode(k);
+					if (isNaN(k)) {
+						return false;
+					}
+					return true;
+				});
+	
+				$('.create-form-components').on('keyup','input[required="required"][type="text"], input[required="required"][type="number"], input[required="required"][type="date"], textarea[required="required"]', function() {
+					validationFieldsForm($(this), $(this).parents('.form-field').data('type'));
+				});
+	
+				$('.create-form-components').on('change', 'input[required="required"][type="checkbox"], input[required="required"][type="radio"], select[required="required"]', function() {
+					validationFieldsForm($(this), $(this).parents('.form-field').data('type'));
+				});
+	
+				function validationFieldsForm(field, type){
+					if (type === "checkbox" || type === "radio"){
+						if(!field.is(':checked')){
+							field.parents('.form-field').addClass('required');
+						}else{
+							field.parents('.form-field').removeClass('required');
+						}
+					}else{
+						if(!field.val().trim()){
+							field.parents('.form-field').addClass('required');
+						}else{
+							field.parents('.form-field').removeClass('required');
+						}
+					}
+				}
+	
+				var $zoomPreview = $(".zoom-preview");
+				if($zoomPreview.length){
+					$zoomPreview.parent().removeClass("input-group");
+					$zoomPreview.remove();
+				}
+	
+				var ratings = $(".rating");
+				if (ratings.length > 0)
+					ratingStars(ratings);
+	
+				function ratingStars(stars) {
+					$.each(stars, function(i, obj) {
+						var field = $(this).closest(".form-group").find(
+								".rating-value");
+						var tgt = $(obj);
+						tgt.html("");
+						var rating = FLUIGC.stars(tgt, {
+							value : field.val()
+						});
+						rating.on("click", function(o) {
+							field.val($(this).index() + 1);
+						});
+					});
+				}
+	
+				$.each($("[data-date]"), function(i, o) {
+					var id = $(o).parent().attr("id");
+					FLUIGC.calendar("#" + id);
+				});
+		</script>
+		
+		<script src="js/util.js"></script>
+		<script src="js/ConsultaCep.js"></script>
+		<script src="js/insert.js"></script>
+		<script src="js/imagem.js"></script>
+		<script src="js/custom.js"></script>
+		<script src="js/vinculo.js"></script>
+		<script src="js/contrato.js"></script>
+		
+	</body>
+	<script src="/ecm_resources/resources/assets/forms/forms.js" type="text/javascript"></script>
+	<script src="/ecm_resources/resources/assets/forms/wdkdetail.js" type="text/javascript"></script>
+
+</html>
+
+
+
+
